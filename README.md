@@ -3,7 +3,7 @@ Statistically Informed Benchmarking Tool
 
 DO NOT USE THIS PROJECT
 -----------------------
-I'm just starting to write this - I'm an inexperienced developer and even worse statistician. This will be little more than a wrapper for the statsample gem if I do it right.
+I'm just starting to write this - I'm an inexperienced developer and even worse statistician. This will be little more than a wrapper for the statsample gem if we do it right.
 
 Motivation
 ----------
