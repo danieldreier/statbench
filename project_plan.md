@@ -32,3 +32,21 @@ Can:
 - --summary-stats -s
 - --file filename
 
+# Rspec tests needed
+
+### calculator class:
+summary_stats:
+  - Pass in an array of numbers
+  - Expect a hash of summary statistics of known values
+
+### controller class:
+
+read_datafile(filename):
+  - pass in a filename
+  - use mocks to expect it to read that file
+  - expect it to return an array of values
+
+- summary_stats_from_file(filename)
+  - pass in a filename
+  - use mocks to expect it to read that file
+  - expect it to return a bash of summary stats
