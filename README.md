@@ -61,6 +61,3 @@ https://metacpan.org/source/DAGOLDEN/Text-BoxPlot-0.001/README
 
 Statsample Ruby Gem
 http://ruby-statsample.rubyforge.org/
-
-Resources for writing command line apps in Ruby
-http://www.awesomecommandlineapps.com/gems.html
