@@ -19,6 +19,12 @@ controller: controller class
 ## calculator class
 
 - summary_stats(array)
+    returns hash of:
+      - 1st and 3rd quartile
+      - median
+      - minimum and maximum values
+      - IQR
+      - upper and lower fence
 
 ## controller class:
 
@@ -31,6 +37,8 @@ Can:
 - --help
 - --summary-stats -s
 - --file filename
+
+some kind of output class to print results
 
 # Rspec tests needed
 
