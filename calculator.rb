@@ -1,5 +1,5 @@
 require 'statsample'
-
+  
 class Calculator
 	# output summary stats of input array (min, max, median, 1st & 3rd quartiles, IQR, upper & lower fences) as a hash
 	def summary_stats(array)
