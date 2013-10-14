@@ -1,0 +1,5 @@
+= statbench
+
+Generate this with
+    statbench rdoc
+After you have described your command line interface

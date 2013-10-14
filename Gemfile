@@ -1,6 +1,3 @@
 source 'https://rubygems.org'
-gem 'rspec', :require => 'spec'
+gemspec
 gem 'statsample'
-gem 'rubyvis'
-gem 'statsample-optimization'
-gem 'methadone'

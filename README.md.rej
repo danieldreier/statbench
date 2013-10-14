@@ -1,0 +1,12 @@
+diff a/README.md b/README.md	(rejected hunks)
+@@ -60,4 +60,7 @@
+ https://metacpan.org/source/DAGOLDEN/Text-BoxPlot-0.001/README
+ 
+ Statsample Ruby Gem
+-http://ruby-statsample.rubyforge.org/
+\ No newline at end of file
++http://ruby-statsample.rubyforge.org/
++
++Resources for writing command line apps in Ruby
++http://www.awesomecommandlineapps.com/gems.html
+\ No newline at end of file
