@@ -53,9 +53,6 @@ Test C                          -------------====O=====--------------->
 
 ## References
 
-Short, simple, direct scripts for creating ASCII graphical histograms in the terminal.
-https://github.com/philovivero/distribution
-
 Text::BoxPlot - Render ASCII box and whisker charts
 https://metacpan.org/source/DAGOLDEN/Text-BoxPlot-0.001/README
 
