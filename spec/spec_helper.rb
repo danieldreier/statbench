@@ -1,1 +1,1 @@
-require_relative '../calculator'
+require_relative '../lib/calculator'
