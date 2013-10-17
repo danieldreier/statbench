@@ -32,13 +32,6 @@ class Calculator
 	# Return a data set with outliers removed (using the upper/lower fence method of identifying outliers). Multiplier is the multiple of IQR
 	# used to determine the fences. We will want to update this method to include other methods of returning outliers.
 	def trim(array, multiplier = 1.5)
-		@data = array.to_vector(:scale)
-    trimmed_array = Array.new()
-		@data.each do |data_point|
-      unless (data_point < @data.median() - (@data.percentil(75) - @data.percentil(25))*multiplier) || (data_point > @data.median() + (@data.percentil(75) - @data.percentil(25))*multiplier)
-        trimmed_array << data_point
-			end
-		end
-    trimmed_array
+    array  - self.find_outliers(array, multiplier)
 	end
 end
