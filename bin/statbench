@@ -36,10 +36,10 @@ command :summarize do |c|
   c.action do |global_options,options,args|
 
     # Your command logic here
-    data = Array.new
-
-    args.each do |filename|
     
+
+   args.each do |filename|
+       data = Array.new
       File.open("#{filename}", "r").each_line do |line|
         data << line.to_f
       end
@@ -55,8 +55,6 @@ command :summarize do |c|
 
     # If you have any errors, just raise them
     # raise "that command made no sense"
-
-    puts "summarize command ran"
   end
 end
 
@@ -67,19 +65,17 @@ command :outliers do |c|
   c.desc 'Invert matching, to select non-outlier data points'
   c.switch [:v,:'invert-match']
   c.action do |global_options,options,args|
-    args.each do |filename|
-      data = Array.new
-      File.open("#{filename}", "r").each_line do |line|
-        data << line.to_f
-      end
-      calc = Calculator.new
-      
-      @output = calc.find_outliers(data) unless options[:v]
-      @output = calc.trim(data) if options[:v]
-      
-      @output.each do |number|
-        puts number
-      end
+    data = Array.new
+    ARGF.readlines.each do |line|
+      data << line.to_f
+    end
+    calc = Calculator.new
+    
+    @output = calc.find_outliers(data) unless options[:v]
+    @output = calc.trim(data) if options[:v]
+    
+    @output.each do |number|
+      puts number
     end
   end
 end
