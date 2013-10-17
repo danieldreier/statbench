@@ -16,21 +16,20 @@ program_desc 'statistical analysis of web server benchmark results'
 
 version Statbench::VERSION
 
-desc 'Describe some switch here'
-switch [:s,:switch]
+#desc 'Describe some switch here'
+#switch [:s,:switch]
 
-desc 'Describe some flag here'
-default_value 'the default'
-arg_name 'The name of the argument'
-flag [:f,:flagname]
+#desc 'Describe some flag here'
+#default_value 'the default'
+#arg_name 'The name of the argument'
+#flag [:f,:flagname]
 
 desc 'Calculate summary statistics'
 arg_name 'filename'
 command :summarize do |c|
-  c.desc 'Display a simple boxplot'
+  c.desc 'Display summary statistics of a dataset'
   c.switch :boxplot
   
-
   #c.desc 'Describe a flag to summarize'
   #c.default_value 'default'
   #c.flag :f
@@ -61,21 +60,37 @@ command :summarize do |c|
   end
 end
 
-desc 'Describe validate here'
-arg_name 'Describe arguments to validate here'
-command :validate do |c|
+
+desc 'print outlier data points'
+arg_name 'filename'
+command :outliers do |c|
+  c.desc 'Invert matching, to select non-outlier data points'
+  c.switch [:v,:'invert-match']
   c.action do |global_options,options,args|
-    puts "validate command ran"
+    args.each do |filename|
+      data = Array.new
+      File.open("#{filename}", "r").each_line do |line|
+        data << line.to_f
+      end
+      calc = Calculator.new
+      
+      @output = calc.find_outliers(data) unless options[:v]
+      @output = calc.trim(data) if options[:v]
+      
+      @output.each do |number|
+        puts number
+      end
+    end
   end
 end
 
-desc 'Describe compare here'
-arg_name 'Describe arguments to compare here'
-command :compare do |c|
-  c.action do |global_options,options,args|
-    puts "compare command ran"
-  end
-end
+#desc 'Describe compare here'
+#arg_name 'Describe arguments to compare here'
+#command :compare do |c|
+#  c.action do |global_options,options,args|
+#    puts "compare command ran"
+#  end
+#end
 
 pre do |global,command,options,args|
   # Pre logic here
