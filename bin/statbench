@@ -3,6 +3,7 @@ require 'gli'
 require 'calculator'
 begin # XXX: Remove this begin/rescue before distributing your app
 require 'statbench'
+require 'reportbuilder'
 rescue LoadError
   STDERR.puts "In development, you need to use `bundle exec bin/statbench` to run your app"
   STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
@@ -80,13 +81,66 @@ command :outliers do |c|
   end
 end
 
-#desc 'Describe compare here'
-#arg_name 'Describe arguments to compare here'
-#command :compare do |c|
-#  c.action do |global_options,options,args|
-#    puts "compare command ran"
-#  end
-#end
+
+desc 'Convert multiple files to CSV'
+arg_name 'filename1 filename2 [filename3 ...]'
+command :join do |c|
+  c.desc 'Join multiple individual files into a CSV'
+
+  c.action do |global_options,options,args|
+   series=1
+   args.each do |filename|
+     data = Array.new
+     File.open("#{filename}", "r").each_line do |line|
+       data << line.to_f
+     end
+      
+     counter=1
+     data.each do |loadtime|
+       puts "#{series},#{counter},#{loadtime}"
+       counter += 1
+     end
+     series += 1
+    end
+  end
+end
+
+desc 'Generate HTML summary report'
+arg_name 'filename1 filename2 [filename3 ...]'
+command :report do |c|
+  c.desc 'Generate a summary HTML report of multiple data files'
+
+  c.action do |global_options,options,args|
+    @rb=ReportBuilder.new
+    @rb.name = "Web Server Performance Data"
+    @datasets=Hash.new  
+    args.each do |filename|
+      @datasets["#{filename}"] = Array.new.to_scale
+      File.open("#{filename}", "r").each_line do |line|
+        @datasets["#{filename}"].add(line.to_f)
+      end
+    end
+
+    arr = []
+    @datasets.each_key do |key|
+    @datasets["#{key}"].name = "#{key}"
+      arr << @datasets["#{key}"]
+    end
+
+    @datasets.each do |filename,data|
+      @rb.add(Statsample::Graph::Histogram.new(data,{:name=>"Load time distribution of #{filename}",:bins=>10}))
+
+      data_numbers=*(1..data.to_a.length)
+      @rb.add(Statsample::Graph::Scatterplot.new(data_numbers.to_scale,data,{:name => "All datapoints in #{filename}"}))
+    end
+
+    @rb.add(Statsample::Graph::Boxplot.new(:vectors=>arr,:name=>"Box plot for data comparison",:height => 700))
+    @rb.save_html('summary_report.html')
+  end
+  #rb.add(Statsample::Graph::Boxplot.new(:vectors=>datasets,:name=>"boxplot"))
+  
+
+end
 
 pre do |global,command,options,args|
   # Pre logic here
