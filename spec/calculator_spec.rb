@@ -7,12 +7,19 @@ class Calculator
   describe Calculator do
   SAMPLE_DATASET=[66, 40, 78, 22, 48, 78, 24, 24, 25, 99, 74, 98, 97, 42, 61, 
                   42, 78, 68, 56, 47, -32, -15, 247, 861]
-  LARGE_DATASET = [171, 27, 65, 120, 167, 42, 198, 114, 6, 32, 178, 142, 4, 
-                   100, 134, 187, 65, 112, 3, 6, 57, 17, 20, 136, 92, 133, 30, 
-                   21, 177, 9, 160, 185, 146, 124, 102, 40, 186, 195, 67, 25]
-  SMALL_BINOMIAL_DATASET = [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0]
-  LARGE_BINOMIAL_DATASET = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+  LARGE_DATASET = [-68, -25, -98, -97, -71, 34, -32, -24, 83, -83, 81, 42,
+                    80, 53, 4, -60, 76, 31, -32, 87, -86, 100, 70, 15, -22 
+                    40, 18, 13, 48, 5, 41, -97, 37, -39, 48, 21, 98, 78, 
+                    93, 14, 98, 20, 8, -63, -56, -99, 36, 66, -21, 0, -4,
+                    96, 19, -67, -69, -20, 92, 64, 46, -1, 13, 77, -95, 62
+                    -85, -91, 67, 86, 12, -15, -99, 16, -73, 66, 63]
+  SMALL_BINOMIAL_DATASET = [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 ]
+  LARGE_BINOMIAL_DATASET = [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+                             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                             1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                           ]
     it 'calculates summary statistics' do 
       calc = Calculator.new
       results = calc.summary_stats(SAMPLE_DATASET)
@@ -52,8 +59,8 @@ class Calculator
                                            :sigma => 55, 
                                            :normal_population => true 
                                         })
-      results[:lower].should be_close(77.83, 0.01)
-      results[:upper].should be_close(111.92, 0.01)
+      results[:lower].should be_close(-4.11, 0.01)
+      results[:upper].should be_close(20.78, 0.01)
       results[:confidence_level].should == 0.95
     end
 
@@ -65,8 +72,8 @@ class Calculator
       results = calc.confidence_interval({ :data => LARGE_DATASET, 
                                            :parameter => 'mean' 
                                         })
-      results[:lower].should be_close(73.72, 0.01)
-      results[:upper].should be_close(116.03, 0.01)
+      results[:lower].should be_close(-5.90, 0.01)
+      results[:upper].should be_close(22.57, 0.01)
       results[:confidence_level].should == 0.95
     end
 
@@ -94,8 +101,8 @@ class Calculator
                                  :parameter => 'mean', 
                                  :confidence_level => 0.95, 
                                  :desired_range => 20, 
-                                 :sigma => 71 
-                              }).should be_close(194, 1)
+                                 :sigma => 68
+                              }).should be_close(316, 1)
     end
 
     it 'suggests a sample size for desired confidence interval and t-test 
@@ -116,8 +123,8 @@ class Calculator
       results = calc.confidence_interval({ :data => LARGE_BINOMIAL_DATASET, 
                                            :parameter => 'proportion'
                                         })
-      results[:lower].should be_close(0.5636, 0.0001)
-      results[:upper].should be_close(0.2472, 0.0001)
+      results[:lower].should be_close(0.3935, 0.0001)
+      results[:upper].should be_close(0.6198, 0.0001)
       results[:confidence_level].should == 0.95
     end
 
@@ -134,11 +141,11 @@ class Calculator
 
     it 'suggests a sample size for desired CI using z-test for proportion' do 
       calc = Calculator.new 
-      calc.suggest_sample_size({ :data => LARGE_DATASET, 
+      calc.suggest_sample_size({ :data => LARGE_BINOMIAL_DATASET, 
                                  :parameter => 'proportion', 
                                  :confidence_level => 0.95, 
                                  :desired_range => 0.1
-                              }).should be_close(370, 2) 
+                              }).should be_close(384, 2) 
     end
 
     it 'suggests a sample size for desired CI using Wilson scores for 
@@ -171,8 +178,8 @@ class Calculator
       results = calc.confidence_interval({ :data => LARGE_DATASET, 
                                            :parameter => 'stdev'
                                         })
-      results[:lower].should be_close(54.19, 0.01) 
-      results[:upper].should be_close(84.94)
+      results[:lower].should be_close(53.30, 0.01) 
+      results[:upper].should be_close(73.73, 0.01)
       results[:confidence_level].should == 0.95
     end
 
@@ -181,7 +188,7 @@ class Calculator
       calc.suggest_sample_size( { :data => LARGE_DATASET, 
                                   :parameter => 'stdev', 
                                   :confidence_level => 0.95, 
-                                  :desired_range => 18.76).should be_close(100, 2)
+                                  :desired_range => 17.5495 } ).should be_close(100, 2)
     end
   end
 end
