@@ -76,6 +76,7 @@ class Calculator
       results[:lower].should be_close(-0.71, 0.01)
       results[:upper].should be_close(17.37, 0.01)
       results[:confidence_level].should == 0.95
+    end
 
     # t-test criteria mainly involve failing the z-test; population must be 
     # symmetrical and unimodal
@@ -94,11 +95,12 @@ class Calculator
     using a t-test (population size given)' do 
       calc = Calculator.new
       results = calc.confidence_interval({ :data => LARGE_DATASET,
-                                           :parameter => 'mean' 
+                                           :parameter => 'mean', 
                                            :population_size => 1000
                                         })
       results[:lower].should be_close(-2, 0.01)
       results[:upper].should be_close(18.67, 0.01)
+    end
 
     # if sigma is known but (non-normal distribution && small sample), have to 
     # do a t-test
@@ -118,14 +120,15 @@ class Calculator
     it 'generates a confidence interval for mean of a single population using
     a t-test with sigma known (population size given)' do 
       calc = Calculator.new 
-      results = calc.confidence_interval({ :data = SAMPLE_DATASET,
+      results = calc.confidence_interval({ :data => SAMPLE_DATASET,
                                            :parameter => 'mean',
                                            :confidence_level => 0.95,
-                                           :sigma => 55
+                                           :sigma => 55,
                                            :population_size => 1000
                                         })
       results[:lower].should be_close(73.21, 0.01)
       results[:upper].should be_close(112.46, 0.01)
+    end
 
     # We need to make sure the size it suggests for the sample doesn't change 
     # any of the test criteria! 
