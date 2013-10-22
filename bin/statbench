@@ -4,6 +4,8 @@ require 'calculator'
 begin # XXX: Remove this begin/rescue before distributing your app
 require 'statbench'
 require 'reportbuilder'
+require 'pathname'
+require 'byebug'
 rescue LoadError
   STDERR.puts "In development, you need to use `bundle exec bin/statbench` to run your app"
   STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
@@ -59,6 +61,129 @@ command :summarize do |c|
   end
 end
 
+desc 'display fancy report'
+arg_name 'filename'
+command :fancyreport do |c|
+  c.desc 'Display an HTML report on one or more datasets'
+  
+  c.action do |global_options,options,args|
+  data = Hash.new
+
+  args.each do |filename|
+    data["#{filename}"] = Array.new
+    File.open("#{filename}", "r").each_line do |line|
+      data["#{filename}"] << line.to_f
+    end
+  end
+  
+  calc = Calculator.new
+  filename = 'chart_template.erb'
+  @report_title = 'Sample Report Title'
+
+  report_options = {  
+    :title => "Title", 
+  }
+  
+  @barchart = Hash.new
+  @barchart = { 
+    :title => "Load time histogram",
+    :xaxis => "data points in range",
+    :yaxis => "load time (seconds)",
+    :data  => [
+      ['Load time (sec)', 'Sales', 'Expenses'],
+      ['1',  1000,      400],
+      ['.5',  1170,      460],
+      ['.25',  660,       1120],
+      ['.1',  1030,      540],
+    ],
+  }
+
+  # Calculations to prepare data for scatterplot
+  length = []
+  data.each do |array|
+    length << array[1].length
+  end
+
+  shortest_length = length.sort.first
+
+  combined = []
+  for row in (0..shortest_length - 1) do
+    combined[row] = Array.new
+    combined[row] << row.to_i
+    data.each_key do |filename|
+      combined[row] << data["#{filename}"][row].to_f
+    end
+  end
+
+@combined_scatterplot_data = Array.new
+# Add reasonable row headers
+first_row = ['Sample #']
+data.each do |array|
+  first_row << Pathname.new(array[0]).basename.to_s
+end
+@combined_scatterplot_data << first_row
+
+for row_number in (0..shortest_length - 1) do
+  temp_array = Array.new  # Re-create with each row
+  temp_array << row_number
+  data.each_key do |key|
+    temp_array << "#{data[key][row_number]}".to_f
+  end
+  @combined_scatterplot_data << temp_array
+end
+
+
+  @scatterplot = { 
+    :title => "Plot of all data",
+    :xaxis => "test",
+    :yaxis => "load time (seconds)", 
+    :data => @combined_scatterplot_data
+  }
+
+@combined_boxplot_data = Array.new
+# Add reasonable row headers
+
+@combined_boxplot_data << ['ID', 'lower_fence', 'lower quartile', 'upper quartile', 'upper_fence', 'Median']
+
+data.each do |filename,sample|
+  stats = calc.summary_stats(sample)
+  @combined_boxplot_data << [Pathname.new(filename).basename.to_s, 
+    stats[:lower_fence], 
+    stats[:quartile_1], 
+    stats[:quartile_3], 
+    stats[:upper_fence], 
+    stats[:median]]
+end
+  @boxplot = {
+    :title => "Load time variability across datasets", 
+    :type  => 'BarChart',
+    :xaxis => "test",
+    :yaxis => "load time (seconds)",
+    :data  => @combined_boxplot_data,
+  }
+
+=begin
+  @boxplot = {
+    :title => "sample box plot", 
+    :type  => 'BarChart',
+    :xaxis => "test",
+    :yaxis => "load time (seconds)",
+    :data  => [
+                ['ID', 'lower_fence', 'lower quartile', 'upper quartile', 'upper_fence', 'Median'],
+                ['Serie1', 20, 50, 100, 200, 300],
+                ['Serie2', 31, 38, 55, 66, 30],
+                ['Serie3', 50, 55, 77, 80, 10],
+                ['Serie4', 77, 77, 66, 90, 20],
+                ['Serie5', 68, 66, 22, 15, 30],
+              ],
+  }
+=end
+  erb = ERB.new(File.read(filename))
+
+  puts erb.result
+
+  end
+end
 
 desc 'print outlier data points'
 arg_name 'filename'
