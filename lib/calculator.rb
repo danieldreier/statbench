@@ -122,41 +122,85 @@ class Calculator
     { :lower => lower, :upper => upper, :confidence_level => confidence_level }
   end
 
-  # The following (commented) code is for a method we're not going to use. I'm keeping it for informational 
-  # purposes as I write other methods.
-  
-  # def confidence_interval(options_hash)
+  ## VARIANCE CONFIDENCE TESTING ##
 
-  #   data = options_hash[:data].to_vector(:scale)
-  #   parameter = options_hash[:parameter]
-  #   confidence_level = options_hash[:confidence_level] || 0.95 
-  #   sigma = options_hash[:sigma] || nil 
-  #   normal = if options_hash[:normal_population] 
-  #     options_hash[:normal_population]
-  #   else 
-  #     nil
-  #   end
+  # Two-tailed confidence interval for population variance using chi-square dist.
+  def variance_confidence_interval_2t(hash)
+    data = hash[:data].to_scale
+    s2 = (hash[:s] || data.standard_deviation_sample()) ** 2
+    df = if hash[:n_sample] then hash[:n_sample] - 1;
+      else data.size - 1; end
+    confidence_level = hash[:confidence_level] || 0.95
+    alpha_over_2 = (1 - confidence_level) / 2  # use to generate test statistics
 
-  #   # the following are named in accordance with standard nomenclature in stats:
-  #   x_bar = data.mean()   # sample mean
-  #   s = data.standard_deviation_sample()    # sample standard deviation
-  #   n_sample = data.size     # sample size
-  #   n_pop = options_hash[:population_size] || n_sample * 10
+    chi2_lower = Distribution::ChiSquare.p_value(1 - alpha_over_2, df)
+    chi2_upper = Distribution::ChiSquare.p_value(alpha_over_2, df)
 
-  #   case parameter
-  #     when 'proportion'
-  #       if n >= 60 
-  #         # Do a z-test 
-  #       else
-  #         # Do a Wilson score interval
-  #       end
-  #     when 'stdev'
-  #       # Confidence interval for standard deviation
-  #   end
+    { :lower => s2 * df / chi2_lower, 
+      :upper => s2 * df / chi2_upper,
+      :confidence_level => confidence_level 
+    }
+  end
 
-  #   confidence_interval = { :lower => ci[0],
-  #                           :upper => ci[1],
-  #                           :confidence_level => confidence_level }
-  #   confidence_interval 
-  # end
+  # 2-tailed confidence interval for population standard deviation
+  def sdev_confidence_interval_2t(hash)
+    variance_hash = variance_confidence_interval_2t(hash)
+    { :lower => Math.sqrt(variance_hash[:lower]),
+      :upper => Math.sqrt(variance_hash[:upper]),
+      :confidence_level => variance_hash[:confidence_level]
+    }
+  end
+
+  # Variance will be greater than or equal to output value with
+  # given confidence level
+  def variance_confidence_interval_lower(hash)
+    data = hash[:data].to_scale
+    s2 = (hash[:s] || data.standard_deviation_sample()) ** 2
+    df = if hash[:n_sample] then hash[:n_sample] - 1;
+      else data.size - 1; end
+    confidence_level = hash[:confidence_level] || 0.95
+    chi2 = Distribution::ChiSquare.p_value(confidence_level,df)
+
+    s2 * df / chi2 
+  end
+
+  # Standard deviation will be greater than or equal to output 
+  # value with given confidence level
+  def sdev_confidence_interval_lower(hash)
+    Math.sqrt( variance_confidence_interval_lower(hash) )
+  end
+
+  # Variance will be less than or equal to output value with given
+  # confidence level
+  def variance_confidence_interval_upper(hash)
+    data = hash[:data].to_scale
+    s2 = (hash[:s] || data.standard_deviation_sample) ** 2
+    df = if hash[:n_sample] then hash[:n_sample] - 1;
+      else data.size - 1; end 
+    alpha = 1 - (hash[:confidence_level] || 0.95)
+    chi2 = Distribution::ChiSquare.p_value(alpha,df)
+
+    s2 * df / chi2 
+  end
+
+  # Standard deviation will be less than or equal to output value
+  # with given level of confidence
+  def sdev_confidence_interval_upper(hash)
+    Math.sqrt( variance_confidence_interval_upper(hash) )
+  end
+
+  ## SAMPLE SIZE ESTIMATION ##
+  def suggest_sample_size_mean(hash)
+    confidence_level = hash[:confidence_level] || 0.95
+    margin_of_error = hash[:range] / 2
+    sigma = hash[:sigma]
+    sdev_sample = hash[:sdev_sample]
+
+    if sigma
+      z = Distribution::Normal.p_value(1 - ((1 - confidence_level).quo(2.0))).abs 
+      ((z * sigma / margin_of_error) ** 2).to_i
+    else
+      # You're going to need a more difficult test, bro.
+    end
+  end
 end

@@ -123,27 +123,24 @@ class Calculator
       results[:confidence_level].should == 0.95
     end
 
-    # We need to make sure the size it suggests for the sample doesn't change 
-    # any of the test criteria! 
+    # The range in question is the total size of the desired confidence interval -
+    # not the margin of error
     it 'suggests a sample size for a mean confidence interval given a margin
     of error (z-test)' do 
       calc = Calculator.new 
-      calc.suggest_sample_size({ :data => LARGE_DATASET, 
-                                 :parameter => 'mean', 
-                                 :confidence_level => 0.95, 
-                                 :margin_of_error => 20, 
-                                 :sigma => 68
-                              }).should be_within(1).of(316)
+      calc.suggest_sample_size_mean({ :confidence_level => 0.95, 
+                                      :range => 40, 
+                                      :sigma => 68
+                                   }).should be_within(1).of(44)
     end
 
     it 'suggests a sample size for a mean confidence interval given a 
     margin of error (t-test)' do 
       calc = Calculator.new 
-      calc.suggest_sample_size({:data => SAMPLE_DATASET, 
-                                :parameter => 'mean', 
-                                :confidence_level => 0.95, 
-                                :margin_of_error => 97
-                              }).should be_within(2).of(51)
+      calc.suggest_sample_size_mean({:data => SAMPLE_DATASET,  
+                                     :confidence_level => 0.95, 
+                                     :range => 194
+                                   }).should be_within(1).of(51)
     end
 
 ########## CONFIDENCE INTERVALS FOR PROPORTION OF A SINGLE POPULATION #########
@@ -195,22 +192,33 @@ class Calculator
 
 ##### CONFIDENCE INTERVALS FOR STANDARD DEVIATION OF A SINGLE POPULATION ######
 
-    it 'generates a confidence interval for standard deviation of a single 
-    population and small sample' do 
-      calc = Calculator.new 
-      results = calc.sdev_confidence_interval(SAMPLE_DATASET, 0.9)
-      results[:lower].should be_within(0.01).of(138.74)
-      results[:upper].should be_within(0.01).of(227.42) 
-      results[:confidence_level].should == 0.9
-    end
-
-    it 'generates a confidence interval for standard deviation of a single 
-    population and large sample' do 
-      calc = Calculator.new 
-      results = calc.sdev_confidence_interval(LARGE_DATASET,0.95)
-      results[:lower].should be_within(0.01).of(53.30) 
+    it 'generates a two-tailed confidence interval for standard deviation 
+    of a single population' do 
+      calc = Calculator.new
+      results = calc.sdev_confidence_interval_2t({ :data => LARGE_DATASET,
+                                                   :confidence_level => 0.95
+                                                })
+      results[:lower].should be_within(0.01).of(53.30)
       results[:upper].should be_within(0.01).of(73.73)
       results[:confidence_level].should == 0.95
+    end
+
+    it 'generates a left-tailed confidence interval for standard deviation
+    of a single population' do 
+      calc = Calculator.new
+      results = calc.sdev_confidence_interval_lower({ :data => LARGE_DATASET,
+                                                      :confidence_level => 0.95 
+                                                   })
+      results.should be_within(0.01).of(54.58)
+    end
+
+    it 'generates a right-tailed confidence interval for standard deviation of 
+    a single population' do 
+      calc = Calculator.new 
+      results = calc.sdev_confidence_interval_upper({ :data => LARGE_DATASET,
+                                                      :confidence_level => 0.95 
+                                                    })
+      results.should be_within(0.01).of(71.64)
     end
 
     it 'suggests a sample size for a standard deviation confidence interval
