@@ -41,8 +41,8 @@ class Calculator
     it 'removes outliers from a data set' do
       calc = Calculator.new
       results = calc.trim(SAMPLE_DATASET)
-      results.sort.should == [22, 24, 24, 25, 40, 42, 42, 47, 48, 56, 61, 66, 
-                              68, 74, 78, 78, 78, 97, 98, 99, -32, -15]
+      results.sort.should == [-32, -15, 22, 24, 24, 25, 40, 42, 42, 47, 48, 56, 61, 66, 
+                              68, 74, 78, 78, 78, 97, 98, 99]
     end
 
 ########## CONFIDENCE INTERVALS FOR MEAN OF A SINGLE POPULATION ##############
