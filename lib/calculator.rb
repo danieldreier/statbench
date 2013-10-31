@@ -4,7 +4,7 @@ class Calculator
   include Statsample::SRS
   # output summary stats of input array (min, max, median, 1st & 3rd quartiles, IQR, upper & lower fences) as a hash
   def summary_stats(array)
-    @data = array.to_vector(:scale)
+    @data = array.to_scale()
     @summary_stats = Hash.new()
     @summary_stats[:minimum] = @data.min()
     @summary_stats[:maximum] = @data.max()
@@ -12,18 +12,18 @@ class Calculator
     @summary_stats[:quartile_1] = @data.percentil(25)
     @summary_stats[:quartile_3] = @data.percentil(75)
     @summary_stats[:iqr] = @data.percentil(75) - @data.percentil(25)
-    @summary_stats[:upper_fence] = @data.median() + @summary_stats[:iqr] * 1.5
-    @summary_stats[:lower_fence] = @data.median() - @summary_stats[:iqr] * 1.5
+    @summary_stats[:upper_fence] = @data.percentil(75) + @summary_stats[:iqr] * 1.5
+    @summary_stats[:lower_fence] = @data.percentil(25) - @summary_stats[:iqr] * 1.5
     @summary_stats
   end
 
-  # Return the outliers in a data set. Multiplier is the multiple of the IQR above or below the median above/below which a data point is
+  # Return the outliers in a data set. Multiplier is the multiple of the IQR above or below quartiles above/below which a data point is
   # considered an outlier. We will want to update this method to include other methods of determining outliers.
   def find_outliers(array, multiplier = 1.5)
-    @data = array.to_vector(:scale)
+    @data = array.to_scale()
     @outliers = Array.new()
     @data.each do |data_point|
-      if (data_point < @data.median() - (@data.percentil(75) - @data.percentil(25))*multiplier) || (data_point > @data.median() + (@data.percentil(75) - @data.percentil(25))*1.5)
+      if (data_point < @data.percentil(25) - (@data.percentil(75) - @data.percentil(25))*multiplier) || (data_point > @data.percentil(75) + (@data.percentil(75) - @data.percentil(25))*1.5)
         @outliers << data_point
       end
     end
