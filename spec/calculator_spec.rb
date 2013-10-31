@@ -28,21 +28,21 @@ class Calculator
       results[:quartile_1].should == 32.5
       results[:quartile_3].should == 78.0
       results[:median].should == 58.5
-      results[:upper_fence].should == 126.75
-      results[:lower_fence].should == -9.75
+      results[:upper_fence].should == 146.25
+      results[:lower_fence].should == -35.75
     end
 
     it 'identifies outliers' do
       calc = Calculator.new
       results = calc.find_outliers(SAMPLE_DATASET)
-      results.sort.should == [-32, -15, 247, 861]
+      results.sort.should == [247, 861]
     end
 
     it 'removes outliers from a data set' do
       calc = Calculator.new
       results = calc.trim(SAMPLE_DATASET)
       results.sort.should == [22, 24, 24, 25, 40, 42, 42, 47, 48, 56, 61, 66, 
-                              68, 74, 78, 78, 78, 97, 98, 99]
+                              68, 74, 78, 78, 78, 97, 98, 99, -32, -15]
     end
 
 ########## CONFIDENCE INTERVALS FOR MEAN OF A SINGLE POPULATION ##############
