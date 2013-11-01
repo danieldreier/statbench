@@ -23,7 +23,7 @@ class Calculator
     @data = array.to_vector(:scale)
     @outliers = Array.new()
     @data.each do |data_point|
-      if (data_point < @data.median() - (@data.percentil(75) - @data.percentil(25))*multiplier) || (data_point > @data.median() + (@data.percentil(75) - @data.percentil(25))*1.5)
+      if (data_point < @data.percentil(25) - (@data.percentil(75) - @data.percentil(25))*multiplier) || (data_point > @data.percentil(75) + (@data.percentil(75) - @data.percentil(25))*1.5)
         @outliers << data_point
       end
     end
