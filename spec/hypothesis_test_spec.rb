@@ -18,9 +18,10 @@ module HypothesisTest
     end
 
     it 'performs two one-tailed tests by default' do 
-      specify do 
-        pending
-      end
+      results = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
+                                       :dataset_2 => SMALL_DATASET_2 })
+      results[:left_tail][:h1].should be('mu1 < mu2')
+      results[:right_tail][:h1].should be('mu1 > mu2')
     end
 
     it 'returns h0, h1, significance level, p, and result for each test' do 
