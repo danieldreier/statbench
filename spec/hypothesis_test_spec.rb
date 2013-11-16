@@ -66,9 +66,10 @@ module HypothesisTest
     end
 
     it 'conducts a set of tests for two means with h0 not rejected' do
-      specify do 
-        pending
-      end
+      result = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
+                                      :dataset_2 => SMALL_DATASET_5 })
+      result[:left_tail][:reject].should eql(false || nil)
+      result[:left_tail][:reject].should eql(false || nil)
     end
 
     it 'conducts a set of tests for two proportions with one h0 rejected' do
