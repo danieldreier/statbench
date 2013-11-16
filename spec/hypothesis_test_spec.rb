@@ -4,7 +4,7 @@ require_relative '../test/data'
 module HypothesisTest
   describe HypothesisTest do 
     it 'returns results as a hash with keys :left_tail, :right_tail, and
-    :significance_level' do 
+    :significance_level' do # This passes
       results = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
                                        :dataset_2 => SMALL_DATASET_2 })
       results.should be_an_instance_of(Hash)
@@ -13,20 +13,20 @@ module HypothesisTest
       results.should have_key[:significance_level]
     end
 
-    it 'conducts tests for mean by default' do 
+    it 'conducts tests for mean by default' do # This passes
       results = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
                                        :dataset_2 => SMALL_DATASET_2 })
       results[:left_tail][:h0].should be('mu1 = mu2')
     end
 
-    it 'performs two one-tailed tests by default' do 
+    it 'performs two one-tailed tests by default' do # This passes
       results = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
                                        :dataset_2 => SMALL_DATASET_2 })
       results[:left_tail][:h1].should be('mu1 < mu2')
       results[:right_tail][:h1].should be('mu1 > mu2')
     end
 
-    it 'returns h0, h1, p, and result for each test' do 
+    it 'returns h0, h1, p, and result for each test' do # This passes
       results = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
                                        :dataset_2 => SMALL_DATASET_2 })
       # This will be a great candidate for refactoring!
@@ -40,13 +40,13 @@ module HypothesisTest
       results[:right_tail].should have_key(:reject)     
     end
     
-  	it 'establishes a 0.05 significance level by default' do 
+  	it 'establishes a 0.05 significance level by default' do # This passes
   		result = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
                                       :dataset_2 => SMALL_DATASET_2 })
       result[:significance_level].should == 0.05
   	end
 
-    it 'adjusts results according to significance level' do 
+    it 'adjusts results according to significance level' do # This passes
       result1 = HypothesisTest::test({ :dataset_1    => SMALL_DATASET_3,
                                        :dataset_2    => SMALL_DATASET_6 })
       result2 = HypothesisTest::test({ :dataset_1    => SMALL_DATASET_3,
@@ -56,7 +56,7 @@ module HypothesisTest
       result2[:left_tail][:reject].should eql(false || nil)
     end
 
-    it 'conducts a set of tests for two means with one h0 rejected' do 
+    it 'conducts a set of tests for two means with one h0 rejected' do # This passes
       result = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_3,
                                       :dataset_2 => SMALL_DATASET_6 })
       result[:left_tail][:h1].should be('mu1 < mu2')
@@ -65,7 +65,7 @@ module HypothesisTest
       result[:right_tail][:reject].should eql(false || nil)
     end
 
-    it 'conducts a set of tests for two means with h0 not rejected' do
+    it 'conducts a set of tests for two means with h0 not rejected' do # This passes
       result = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
                                       :dataset_2 => SMALL_DATASET_5 })
       result[:left_tail][:reject].should eql(false || nil)
