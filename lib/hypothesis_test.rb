@@ -18,7 +18,7 @@ module HypothesisTest
     when :sdev then test_variance(@data_1,@data_2,@sig_level,true); end
   end
 
-  def test_mean(data1,data2,significance_level)
+  def test_mean(data1,data2,significance)
     h0             = 'mu1 = mu2'
     h1_left        = 'mu1 < mu2'
     h1_right       = 'mu1 > mu2'
@@ -30,10 +30,10 @@ module HypothesisTest
     t              = TestStatisticHelper::initialize_with({ :distribution => :t,
                                                             :value        => t_value,
                                                             :degrees_of_freedom => nu })
-    if t.p < significance_level then reject_left = true;
-    elsif (1-t.p) < significance_level then reject_right = true; end
+    if t.p < significance then reject_left = true;
+    elsif (1-t.p) < significance then reject_right = true; end
 
-    { :significance_level => significance_level,
+    { :significance_level => significance,
       :left_tail          => { :h0 => h0, :h1 => h1_left, :p => t.p, :reject => reject_left},
       :right_tail         => { :h0 => h0, :h1 => h1_right, :p => 1-t.p, :reject => reject_right}
     }
