@@ -76,10 +76,10 @@ module TestStatisticHelper
 
   def initialize_with(hash)
     case hash[:distribution]
-    when 'z' then initialize_z(hash)
-    when 't' then initialize_t(hash)
-    when 'chi2' then initialize_chi2(hash)
-    when 'f' then initialize_f(hash)
+    when :z then initialize_z(hash)
+    when :t then initialize_t(hash)
+    when :chi2 then initialize_chi2(hash)
+    when :f then initialize_f(hash)
     else raise(ArgumentError,'Error: Need to specify distribution')
     end
   end
@@ -123,7 +123,7 @@ module TestStatisticHelper
       action.yield(:p,'p')
 
     when attribute == 'degrees_of_freedom' || attribute == 'nu'
-      if attribute_hash[:distribution] == 'z' || attribute_hash[:distribution] == 'f'
+      if attribute_hash[:distribution] == :z || attribute_hash[:distribution] == :f
         raise(error_message)
       else 
         if attribute_hash.has_key?(:nu) then action.yield(:nu,'nu')
@@ -131,14 +131,14 @@ module TestStatisticHelper
       end
 
     when attribute == 'tail'
-      unless attribute_hash[:distribution] == 'chi2' || attribute_hash[:distribution] == 'f'
+      unless attribute_hash[:distribution] == :chi2 || attribute_hash[:distribution] == :f
         raise(error_message)
       else
         action.yield(:tail,'tail')
       end
 
     when attribute == 'degrees_of_freedom_1' || attribute == 'nu1'
-      unless attribute_hash[:distribution] == 'f'
+      unless attribute_hash[:distribution] == :f
         raise(error_message)
       else
         if attribute_hash.has_key?(:nu1) then action.yield(:nu1,'nu1')
@@ -146,7 +146,7 @@ module TestStatisticHelper
       end
 
     when attribute == 'degrees_of_freedom_2' || attribute == 'nu2'
-      unless attribute_hash[:distribution] == 'f'
+      unless attribute_hash[:distribution] == :f
         raise(error_message)
       else
         if attribute_hash.has_key?(:nu2) then action.yield(:nu2,'nu2')
@@ -161,3 +161,4 @@ module TestStatisticHelper
 
   end
 end
+
