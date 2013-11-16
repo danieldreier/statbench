@@ -73,9 +73,13 @@ module HypothesisTest
     end
 
     it 'conducts a set of tests for two proportions with one h0 rejected' do
-      specify do 
-        pending
-      end
+      result = HypothesisTest::test({ :dataset_1 => LARGE_BINOMIAL_DATASET_1,
+                                      :dataset_2 => LARGE_BINOMIAL_DATASET_2,
+                                      :parameter => :proportion })
+      result[:left_tail][:h1].should be('p1 < p2')
+      result[:left_tail][:reject].should eql(false || nil)
+      result[:right_tail][:h1].should be('p1 > p2')
+      result[:right_tail][:reject].should eql(true)
     end
 
     it 'conducts a set of tests for two proportions with h0 not rejected' do 
@@ -95,39 +99,5 @@ module HypothesisTest
         pending
       end
     end
-
-    
-    # Needed hypothesis tests:
-    #
-    # => Single mean
-    # => - Left-tailed
-    # => - Right-tailed
-    #
-    # => Two mean
-    # => - Two-tailed
-    # => - Left-tailed
-    # => - Right-tailed
-    #
-    # => Single proportion
-    # => - Two-tailed
-    # => - Left-tailed
-    # => - Right-tailed
-    #
-    # => Two proportion
-    # => - Two-tailed
-    # => - Left-tailed
-    # => - Right-tailed
-    # 
-    # => One sdev/variance
-    # => - Two-tailed
-    # => - Left-tailed
-    # => - Right-tailed
-    #
-    # => Two sdev/variance
-    # => - Two-tailed
-    # => - Left-tailed
-    # => - Right-tailed
-    #
-    # => Goodness of fit (separate module?)
   end
 end
