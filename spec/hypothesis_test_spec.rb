@@ -98,9 +98,12 @@ module HypothesisTest
     end
 
     it 'conducts a set of tests for two variances with h0 not rejected' do 
-      specify do 
-        pending
-      end
+      result = HypothesisTest::test({ :dataset_1    => SMALL_DATASET_3,
+                                      :dataset_2    => SMALL_DATASET_2,
+                                      :parameter    => :variance,
+                                      :significance => 0.05 })
+      result[:left_tail][:reject].should eql(false || nil)
+      result[:right_tail][:reject].should eql(false || nil)
     end
   end
 end
