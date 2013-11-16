@@ -47,9 +47,12 @@ module HypothesisTest
   	end
 
     it 'conducts a set of tests for two means with one h0 rejected' do 
-      specify do 
-        pending
-      end
+      result = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_3,
+                                      :dataset_2 => SMALL_DATASET_6 })
+      result[:left_tail][:h1].should be('mu1 < mu2')
+      result[:left_tail][:reject].should == true
+      result[:right_tail][:h1].should be('mu1 > mu2')
+      result[:right_tail][:reject].should == false || nil
     end
 
     it 'conducts a set of tests for two means with h0 not rejected' do
