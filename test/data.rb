@@ -21,8 +21,13 @@ SMALL_DATASET_4          = [ 110, 21, 79, 39, 58, 40, 22, 60, 49, 132, 32, 109,
 # SMALL_DATASET_5 (larger mean)
 # n = 18, mean = 138.4444, standard deviation = 40.0591
 SMALL_DATASET_5          = [ 148, 76, 150, 183, 103, 168, 186, 162, 144, 77, 115, 179, 
-                             61, 126, 142, 113, 175, 184
-                           ]
+                             61, 126, 142, 113, 175, 184 ]
+
+# SMALL_DATASET_6 (medium-sized mean)
+# n = 27, mean = 92.0, standard deviation = 37.4669
+SMALL_DATASET_6          = [ 150, 109, 149, 100, 76, 49, 57, 140, 115, 31, 98, 
+                             144, 68, 32, 37, 119, 98, 110, 112, 121, 109, 73, 
+                             67, 33, 57, 128, 102 ]
 
 # LARGE_DATASET_1
 # n = 75, mean = 8.3333, standard deviation = 61.8714
