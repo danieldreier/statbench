@@ -109,7 +109,7 @@ module HypothesisTest
       result[:right_tail][:reject].should eql(false || nil)
     end
 
-    it 'uses variance test when standard deviation specified' do 
+    it 'uses variance test when standard deviation specified as parameter' do 
       result1 = HypothesisTest::test({ :dataset_1    => SMALL_DATASET_3,
                                        :dataset_2    => SMALL_DATASET_2,
                                        :parameter    => :variance,
