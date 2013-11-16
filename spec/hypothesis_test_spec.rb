@@ -41,9 +41,9 @@ module HypothesisTest
     end
     
   	it 'establishes a 0.05 significance level by default' do 
-  		specify do 
-  			pending
-  		end
+  		result = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
+                                      :dataset_2 => SMALL_DATASET_2 })
+      result[:significance_level].should == 0.05
   	end
 
     it 'conducts a set of tests for two means with one h0 rejected' do 
