@@ -46,13 +46,23 @@ module HypothesisTest
       result[:significance_level].should == 0.05
   	end
 
+    it 'adjusts results according to significance level' do 
+      result1 = HypothesisTest::test({ :dataset_1    => SMALL_DATASET_3,
+                                       :dataset_2    => SMALL_DATASET_6 })
+      result2 = HypothesisTest::test({ :dataset_1    => SMALL_DATASET_3,
+                                       :dataset_2    => SMALL_DATASET_6,
+                                       :significance => 0.01 })
+      result1[:left_tail][:reject].should eql(true)
+      result2[:left_tail][:reject].should eql(false || nil)
+    end
+
     it 'conducts a set of tests for two means with one h0 rejected' do 
       result = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_3,
                                       :dataset_2 => SMALL_DATASET_6 })
       result[:left_tail][:h1].should be('mu1 < mu2')
-      result[:left_tail][:reject].should == true
+      result[:left_tail][:reject].should eql(true)
       result[:right_tail][:h1].should be('mu1 > mu2')
-      result[:right_tail][:reject].should == false || nil
+      result[:right_tail][:reject].should eql(false || nil)
     end
 
     it 'conducts a set of tests for two means with h0 not rejected' do
