@@ -25,9 +25,19 @@ module HypothesisTest
     end
 
     it 'returns h0, h1, significance level, p, and result for each test' do 
-      specify do 
-        pending
-      end
+      results = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
+                                       :dataset_2 => SMALL_DATASET_2 })
+      # This will be a great candidate for refactoring!
+      results[:left_tail].should have_key(:h0)
+      results[:left_tail].should have_key(:h1)
+      results[:left_tail].should have_key(:p)
+      results[:left_tail].should have_key(:significance_level)
+      results[:left_tail].should have_key(:reject)
+      results[:right_tail].should have_key(:h0)
+      results[:right_tail].should have_key(:h1)
+      results[:right_tail].should have_key(:p)
+      results[:right_tail].should have_key(:significance_level)
+      results[:right_tail].should have_key(:reject)     
     end
     
   	it 'establishes a 0.05 significance level by default' do 
