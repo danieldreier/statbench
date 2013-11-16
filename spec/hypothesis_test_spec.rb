@@ -83,9 +83,12 @@ module HypothesisTest
     end
 
     it 'conducts a set of tests for two proportions with h0 not rejected' do 
-      specify do 
-        pending
-      end
+      result = HypothesisTest::test({ :dataset_1    => SMALL_BINOMIAL_DATASET_1,
+                                      :dataset_2    => SMALL_BINOMIAL_DATASET_3,
+                                      :parameter    => :proportion,
+                                      :significance => 0.1 })
+      result[:left_tail][:reject].should eql(false || nil)
+      result[:right_tail][:reject].should eql(false || nil)
     end
 
     it 'conducts a set of tests for two variances with one h0 rejected' do 
