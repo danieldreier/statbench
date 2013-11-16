@@ -5,17 +5,16 @@ module HypothesisTest
   describe HypothesisTest do 
     it 'returns results as a hash with keys :left_tail and :right_tail' do 
       results = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
-                                       :dataset_2 => SMALL_DATASET_2,
-                                       :parameter => :mean })
+                                       :dataset_2 => SMALL_DATASET_2 })
       results.should be_an_instance_of(Hash)
       results.should have_key[:left_tail]
       results.should have_key[:right_tail]
     end
 
     it 'conducts tests for mean by default' do 
-      specify do 
-        pending
-      end
+      results = HypothesisTest::test({ :dataset_1 => SMALL_DATASET_1,
+                                       :dataset_2 => SMALL_DATASET_2 })
+      results[:left_tail][:h0].should be('mu1 = mu2')
     end
 
     it 'performs two one-tailed tests by default' do 
