@@ -72,7 +72,7 @@ module HypothesisTest
       result[:left_tail][:reject].should eql(false || nil)
     end
 
-    it 'conducts a set of tests for two proportions with one h0 rejected' do
+    it 'conducts a set of tests for two proportions with one h0 rejected' do # This passes
       result = HypothesisTest::test({ :dataset_1 => LARGE_BINOMIAL_DATASET_1,
                                       :dataset_2 => LARGE_BINOMIAL_DATASET_2,
                                       :parameter => :proportion })
@@ -82,7 +82,7 @@ module HypothesisTest
       result[:right_tail][:reject].should eql(true)
     end
 
-    it 'conducts a set of tests for two proportions with h0 not rejected' do 
+    it 'conducts a set of tests for two proportions with h0 not rejected' do # This passes
       result = HypothesisTest::test({ :dataset_1    => SMALL_BINOMIAL_DATASET_1,
                                       :dataset_2    => SMALL_BINOMIAL_DATASET_3,
                                       :parameter    => :proportion,
