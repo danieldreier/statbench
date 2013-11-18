@@ -91,7 +91,7 @@ module HypothesisTest
       result[:right_tail][:reject].should eql(false || nil)
     end
 
-    it 'conducts a set of tests for two variances with one h0 rejected' do 
+    it 'conducts a set of tests for two variances with one h0 rejected' do # This passes
       result = HypothesisTest::test({ :dataset_1    => SMALL_DATASET_3,
                                       :dataset_2    => SMALL_DATASET_1,
                                       :parameter    => :variance,
@@ -100,7 +100,7 @@ module HypothesisTest
       result[:right_tail][:reject].should eql(false)
     end
 
-    it 'conducts a set of tests for two variances with h0 not rejected' do 
+    it 'conducts a set of tests for two variances with h0 not rejected' do # This passes
       result = HypothesisTest::test({ :dataset_1    => SMALL_DATASET_3,
                                       :dataset_2    => SMALL_DATASET_2,
                                       :parameter    => :variance,
@@ -109,7 +109,7 @@ module HypothesisTest
       result[:right_tail][:reject].should eql(false || nil)
     end
 
-    it 'uses variance test when standard deviation specified as parameter' do 
+    it 'uses variance test when standard deviation specified as parameter' do # This passes
       result1 = HypothesisTest::test({ :dataset_1    => SMALL_DATASET_3,
                                        :dataset_2    => SMALL_DATASET_2,
                                        :parameter    => :variance,
@@ -118,10 +118,12 @@ module HypothesisTest
                                        :dataset_2    => SMALL_DATASET_2,
                                        :parameter    => :sdev,
                                        :significance => 0.05 })
-      result1[:parameter].should be(:variance)
-      result2[:parameter].should be(:sdev)
-      result1[:left_tail].should eql(result2[:left_tail])
-      result1[:right_tail].should eql(result2[:right_tail])
+      result1[:left_tail][:h0].should eql('var1 = var2')
+      result2[:left_tail][:h0].should eql('sigma1 = sigma2')
+      result1[:left_tail][:p].should eql(result2[:left_tail][:p])
+      result1[:left_tail][:reject].should eql(result2[:left_tail][:reject])
+      result1[:right_tail][:p].should eql(result2[:right_tail][:p])
+      result1[:right_tail][:reject].should eql(result2[:right_tail][:reject])
     end
   end
 end
