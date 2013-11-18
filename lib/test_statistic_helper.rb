@@ -1,7 +1,9 @@
 require 'distribution'
+require 'statistics2'
 
 module TestStatisticHelper
   include Distribution
+  include Statistics2
 
   ## Initialization methods 
 
@@ -28,12 +30,17 @@ module TestStatisticHelper
   end
 
   def initialize_f(hash)
+    nu1  = hash[:degrees_of_freedom_1]
+    nu2  = hash[:degrees_of_freedom_2]
+    tail = hash[:tail]
+
     if hash[:value]
-      output = TestStatistic.new(hash[:value])
+      output   = TestStatistic.new(hash.delete(:value))
+      hash[:p] = if tail == 'right' then 1 - Statistics2.fdist(nu1,nu2,output)
+      elsif tail == 'left' then Statistics2.fdist(nu1,nu2,output)
+      else raise('Please specify a tail or instantiate two F statistics for a two-tailed test.'); end
     else
       p = hash[:p] || hash[:alpha]
-      nu1 = hash[:degrees_of_freedom_1]
-      nu2 = hash[:degrees_of_freedom_2]
       tail = hash[:tail]
 
       if tail == 'right'
@@ -41,7 +48,7 @@ module TestStatisticHelper
       elsif tail == 'left'
         output = TestStatistic.new(Distribution::F.p_value(p,nu1,nu2))
       else
-        raise('Please specify a tail or instantiate two TestStatistics for two-tailed test.')
+        raise('Please specify a tail or instantiate two F statistics for two-tailed test.')
       end
     end
 
