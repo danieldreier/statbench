@@ -50,8 +50,6 @@ module HypothesisTest
     z_value   = (p_hat_1 - p_hat_2).quo(std_error)
     z         = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                        :value        => z_value })
-    puts "phat1 - phat2 = #{p_hat_1 - p_hat_2}"
-    puts "z = #{z}"
     if (1 - z.p) < significance then reject_left = true;
     elsif z.p < significance then reject_right = true; end
 
@@ -60,4 +58,37 @@ module HypothesisTest
       :right_tail         => { :h0 => h0, :h1 => h1_right, :p => z.p, :reject => reject_right }
     }
   end
+
+  def test_variance(data1,data2,significance,sdev=false)
+    h0       = if sdev then 'sigma1 = sigma2'; else 'var1 = var2'; end 
+    h1_left  = if sdev then 'sigma1 < sigma2'; else 'var1 < var2'; end 
+    h1_right = if sdev then 'sigma1 > sigma2'; else 'var1 > var2'; end
+    var1     = data1.variance_sample
+    var2     = data2.variance_sample
+    f_value  = var1 / var2 
+    f_right  = TestStatisticHelper::initialize_with({ :distribution => :f,
+                                                      :degrees_of_freedom_1 => n1 = data1.size,
+                                                      :degrees_of_freedom_2 => n2 = data2.size,
+                                                      :tail                 => 'right',
+                                                      :value                => f_value })
+    f_left   = TestStatisticHelper::initialize_with({ :distribution         => :f,
+                                                      :degrees_of_freedom_1 => n1,
+                                                      :degrees_of_freedom_2 => n2,
+                                                      :tail                 => 'left',
+                                                      :value                => f_value })
+    if f_right.p < significance 
+      reject_right = true
+    elsif f_left.p < significance 
+      reject_left = true
+    end
+
+    { :significance_level => significance,
+      :left_tail          => { :h0 => h0, :h1 => h1_left, :p => f_left.p, :reject => reject_left },
+      :right_tail         => { :h0 => h0, :h1 => h1_right, :p => f_right.p, :reject => reject_right }
+    }
+  end
 end
+
+include HypothesisTest
+p HypothesisTest::test({ :dataset_1 => SMALL_DATASET_3, :dataset_2 => SMALL_DATASET_2, :parameter => :variance, :significance => 0.05 })
+p HypothesisTest::test({ :dataset_1 => SMALL_DATASET_3, :dataset_2 => SMALL_DATASET_2, :parameter => :sdev, :significance => 0.05 })
