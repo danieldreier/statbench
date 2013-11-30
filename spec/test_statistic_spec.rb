@@ -84,14 +84,14 @@ class TestStatistic
           end
 
           it 'instantiates with z-distribution given alpha and value' do 
-            pending("additional Distribution functionality")
+            pending "additional Distribution functionality"
             z = TestStatisticHelper::initialize_with({ :value => 1.96,
                                                        :alpha => 0.025 })
             z.distribution.should_be(:z)
           end
 
           it 'instantiates with alpha given distribution and value' do 
-            pending("additional Distribution functionality")
+            pending "additional Distribution functionality"
             z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                        :value        => 1.96 })
             z.alpha.should be_within(ACCEPTABLE_ERROR).of(0.025)
@@ -230,7 +230,7 @@ class TestStatistic
         end
 
         it 'returns both sets of degrees of freedom when queried' do 
-          pending('future version')
+          pending 'future version'
           f = TestStatisticHelper::initialize_with({ :degrees_of_freedom_1 => 8,
                                                      :degrees_of_freedom_2 => 24,
                                                      :distribution         => :f,
