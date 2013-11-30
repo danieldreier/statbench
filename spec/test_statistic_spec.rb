@@ -1,231 +1,244 @@
-require 'spec_helper'
+require_relative 'spec_helper'
 
 class TestStatistic
   include TestStatisticHelper
-  describe TestStatistic do 
 
-    ### INSTANTIATION WITH ACTUAL STATISTIC VALUE UNKNOWN ###
+  ACCEPTABLE_ERROR = 0.0005
 
-    it 'instantiates with correct z-value' do       # This will pass
-      z = TestStatisticHelper::initialize_with({ :distribution => :z,
-                                                 :alpha        => 0.025 })
-      z.abs.should be_within(0.0005).of(1.96)
+  describe TestStatistic do
+    describe 'general characteristics' do 
+      it 'can be used in calculations like a float' do 
+        z = TestStatisticHelper::initialize_with({ :distribution => :z,
+                                                   :p            => 0.025 })
+        (z * 1.5).should be_instance_of(Numeric)
+      end
+
+      it 'can be initialized with :p or :alpha as probability of Type I error' do 
+        z1 = TestStatisticHelper::initialize_with({ :distribution => :z,
+                                                    :p            => 0.025 })
+        z2 = TestStatisticHelper::initialize_with({ :distribution => :z,
+                                                    :alpha        => 0.025 })
+        z1.should == z2
+      end
     end
 
-    it 'instantiates with correct t-value' do       # This will pass
-      t = TestStatisticHelper::initialize_with({ :distribution => :t,
-                              :alpha => 0.05,
-                              :degrees_of_freedom => 18 })
-      t.abs.should be_within(0.0005).of(1.734)
+    describe 'attribute reader' do 
+      it 'gives a hash of its own attributes' do 
+        z = TestStatisticHelper::initialize_with({ :distribution => :z,
+                                                   :alpha        => 0.025 })
+        z.attributes.should be_instance_of(Hash)
+      end
+
+      it 'only displays attributes relevant to its distribution' do 
+        t = TestStatisticHelper::initialize_with({ :distribution       => :t,
+                                                   :degrees_of_freedom => 20,
+                                                   :alpha              => 0.05,
+                                                   :tail               => 'right' })
+        t.attributes.should_not have_key(:tail)
+      end
+
+      it 'returns its distribution' do 
+        z = TestStatisticHelper::initialize_with({ :distribution => :z,
+                                                   :alpha        => 0.05 })
+        z.distribution.should be(:z)
+      end
+
+      it 'returns its degrees of freedom' do 
+        t = TestStatisticHelper::initialize_with({ :distribution       => :t,
+                                                   :degrees_of_freedom => 25,
+                                                   :alpha              => 0.025 })
+        t.degrees_of_freedom.should be(25)
+      end
+
+      it 'responds to queries for #p, #alpha, or #p_value' do 
+        z = TestStatisticHelper::initialize_with({ :distribution => :z,
+                                                   :p            => 0.05 })
+        z.p.should equal(z.alpha)
+        z.p.should equal(z.p_value)
+      end
+
+      it 'returns its tail' do 
+        chi2 = TestStatisticHelper::initialize_with({ :distribution       => :chi2,
+                                                      :tail               => 'right',
+                                                      :degrees_of_freedom => 16,
+                                                      :p                  => 0.05 })
+        chi2.tail.should equal('right')
+      end
     end
 
-    it 'instantiates with correct chi-square value' do  # This will pass
-      chi2 = TestStatisticHelper::initialize_with({ :distribution => :chi2,
-                                 :alpha => 0.05,
-                                 :tail => 'right',
-                                 :degrees_of_freedom => 16 })
-      chi2.should be_within(0.0005).of(26.296)
+    describe 'z-statistic' do 
+      describe 'instantiation' do 
+        context 'with actual statistic value unknown' do 
+          it 'instantiates with the correct z-value' do 
+            z = TestStatisticHelper::initialize_with({ :distribution => :z,
+                                                       :alpha        => 0.025 })
+            z.abs.should be_within(ACCEPTABLE_ERROR).of(1.96)
+          end
+        end
+
+        context 'with actual statistic value unknown' do 
+          it 'instantiates with the correct alpha given value' do 
+            z = TestStatisticHelper::initialize_with({ :distribution => :z,
+                                                       :value        => 1.96 })
+            z.alpha.should be_within(ACCEPTABLE_ERROR).of(1.96)
+          end
+
+          it 'instantiates with z-distribution given alpha and value' do 
+            pending("additional Distribution functionality")
+            z = TestStatisticHelper::initialize_with({ :value => 1.96,
+                                                       :alpha => 0.025 })
+            z.distribution.should_be(:z)
+          end
+
+          it 'instantiates with alpha given distribution and value' do 
+            pending("additional Distribution functionality")
+            z = TestStatisticHelper::initialize_with({ :distribution => :z,
+                                                       :value        => 1.96 })
+            z.alpha.should be_within(ACCEPTABLE_ERROR).of(0.025)
+          end
+        end
+      end
+
+      describe "attributes" do 
+        it 'returns nil when queried for degrees of freedom' do 
+          z = TestStatisticHelper::initialize_with({ :distribution => :z,
+                                                     :alpha        => 0.025 })
+          z.degrees_of_freedom.should_be(nil)
+        end
+      end
     end
 
-    it 'instantiates with correct F-value' do   # This too will pass
-      f = TestStatisticHelper::initialize_with({ :distribution => :f,
-                              :p => 0.05,
-                              :tail => 'right',
-                              :degrees_of_freedom_1 => 17,
-                              :degrees_of_freedom_2 => 23 })
-      f.should be_within(0.0005).of(2.091)
+    describe "t-statistic" do 
+      describe "instantiation" do 
+        context 'with statistic value unknown' do 
+          it 'instantiates with the correct value' do 
+            t = TestStatisticHelper::initialize_with({ :distribution       => :t,
+                                                       :alpha              => 0.05,
+                                                       :degrees_of_freedom => 18 })
+            t.should be_within(ACCEPTABLE_ERROR).of(1.734)
+          end
+        end
+
+        context 'with statistic value known' do 
+          it 'instantiates with correct alpha' do 
+            t = TestStatisticHelper::initialize_with({ :distribution       => :t,
+                                                       :degrees_of_freedom => 8,
+                                                       :value              => 1.8595 })
+            t.alpha.should be_within(ACCEPTABLE_ERROR).of(0.05)
+          end
+
+          it 'instantiates with correct nu' do 
+            t = TestStatisticHelper::initialize_with({ :distribution => :t,
+                                                       :alpha        => 0.05,
+                                                       :value        => -1.8595 })
+            t.nu.should == 8
+          end
+
+          it 'instantiates with correct distribution' do 
+            t = TestStatisticHelper::initialize_with({ :degrees_of_freedom => 19,
+                                                       :value              => 2.093,
+                                                       :p                  => 0.025 })
+            t.distribution.should == :t 
+          end
+        end
+      end
     end
 
-    ### INSTANTIATION WITH STATISTIC VALUE KNOWN ###
+    describe 'chi-square statistic' do 
+      describe 'instantiation' do 
+        context 'with statistic value known' do 
+          it 'instantiates with correct value' do 
+            chi2 = TestStatisticHelper::initialize_with({ :distribution       => :chi2,
+                                                          :tail               => 'right',
+                                                          :degrees_of_freedom => 16,
+                                                          :alpha              => 0.05 })
+            chi2.should be_within(ACCEPTABLE_ERROR).of(26.296)
+          end
+        end
 
-    it 'instantiates with correct alpha given value, distribution (z)' do   # This will pass
-      z = TestStatisticHelper::initialize_with({ :distribution => :z,
-                              :value => 1.96 })
-      z.p.should be_within(0.0005).of(0.025)
+        context 'with statistic value unknown' do 
+          it 'instantiates with correct nu' do 
+            chi2 = TestStatisticHelper::initialize_with({ :distribution => :chi2,
+                                                          :tail         => 'left',
+                                                          :value        => 17.708,
+                                                          :p            => 0.05 })
+            chi2.degrees_of_freedom.should == 29
+          end
+
+          it 'instantiates with correct alpha' do 
+            chi2 = TestStatisticHelper::initialize_with({ :degrees_of_freedom => 8,
+                                                          :distribution       => :chi2,
+                                                          :tail               => 'right',
+                                                          :value              => 15.5073 })
+            chi2.alpha.should be_within(ACCEPTABLE_ERROR).of(0.05)
+          end
+        end
+      end
+
+      describe 'attribute reader' do 
+        it 'returns its tail when queried' do 
+          chi2 = TestStatisticHelper::initialize_with({ :degrees_of_freedom => 20,
+                                                        :distribution       => :chi2,
+                                                        :tail               => 'left',
+                                                        :p                  => 0.05 })
+          chi2.tail.should be('left')
+        end
+      end
     end
 
-    it 'instantiates with correct alpha given value, distribution, nu (t)' do 
-      t = TestStatisticHelper::initialize_with({ :distribution => :t,
-                                                 :value => 1.8595,
-                                                 :degrees_of_freedom => 8 })
-      t.p.should be_within(0.001).of(0.05)
+    describe 'F statistic' do 
+      describe 'instantiation' do 
+        context 'statistic value known' do 
+          it 'instantiates with correct value' do 
+            f = TestStatisticHelper::initialize_with({ :degrees_of_freedom_1 => 17,
+                                                       :degrees_of_freedom_2 => 23,
+                                                       :distribution         => :f,
+                                                       :tail                 => 'right',
+                                                       :p                    => 0.05 })
+            f.should be_within(ACCEPTABLE_ERROR).of(2.091)
+          end
+        end
+
+        context 'statistic value unknown' do 
+          it 'instantiates with correct alpha' do 
+            pending
+          end
+          
+          it 'instantiates with correct tail' do 
+            pending
+          end
+
+          it 'instantiates with correct distribution' do 
+            pending
+          end
+
+          it 'instantiates with correct nu1 or nu2' do 
+            pending
+          end
+        end
+      end
+
+      describe 'attribute reader' do 
+        it 'returns its degrees of freedom when queried' do 
+          f = TestStatisticHelper::initialize_with({ :degrees_of_freedom_1 => 8,
+                                                     :degrees_of_freedom_2 => 24,
+                                                     :distribution         => :f,
+                                                     :tail                 => 'right',
+                                                     :p                    => 0.05 })
+          f.nu1.should equal(8)
+          f.nu2.should equal(24)
+        end
+
+        it 'returns both sets of degrees of freedom when queried' do 
+          pending('future version')
+          f = TestStatisticHelper::initialize_with({ :degrees_of_freedom_1 => 8,
+                                                     :degrees_of_freedom_2 => 24,
+                                                     :distribution         => :f,
+                                                     :tail                 => 'right',
+                                                     :p                    => 0.05 })
+          f.nu.should equal( [8, 24])
+        end
+      end
     end
-
-    it 'instantiates with correct nu given value, distribution, alpha (t)' do 
-      t = TestStatisticHelper::initialize_with({ :distribution => :t,
-                                                 :value => -1.8595,
-                                                 :p => 0.05 })
-      t.nu.should == 8
-    end
-
-    it 'instantiates with correct distribution given value, alpha, nu (t)' do 
-      t = TestStatisticHelper::initialize_with({ :value => 2.093,
-                              :alpha => 0.025,
-                              :degrees_of_freedom => 19 })
-      t.distribution.should be("t")
-    end
-
-    it 'instantiates with correct nu given value, alpha, distribution, tail (chi2)' do 
-      chi2 = TestStatisticHelper::initialize_with({ :distribution => :chi2,
-                                 :alpha => 0.05,
-                                 :tail => 'left',
-                                 :value => '17.708'})
-      chi2.degrees_of_freedom.should be(29)
-    end
-
-    it 'instantiates with correct alpha given value, distribution, nu, tail (chi2)' do 
-      chi2 = TestStatisticHelper::initialize_with({ :distribution => :chi2,
-                                                    :value =>15.5073,
-                                                    :degrees_of_freedom =>8,
-                                                    :tail => 'right' })
-      chi2.p.should be_within(0.001).of(0.05)
-    end
-
-
-    ### GENERAL BEHAVIOR ###
-
-    it 'can be used in calculations like a float' do        # This will pass
-      chi2 = TestStatisticHelper::initialize_with({ :distribution => :chi2,
-                                 :degrees_of_freedom => 23,
-                                 :p => 0.05,
-                                 :tail => 'right' 
-                              })
-      (chi2 * 1.86).should be_instance_of(Numeric)
-    end
-
-    it 'accepts the names :alpha and :p for probability of Type I error' do # This will pass
-      z1 = TestStatisticHelper::initialize_with({ :distribution => :z,
-                               :p => 0.05 })
-      z2 = TestStatisticHelper::initialize_with({ :distribution => :z,
-                               :alpha => 0.05 })
-      z1.should == z2
-    end
-
-    ### ACCESSING ATTRIBUTES ###
-
-    it 'gives a hash of information about itself when queried' do # This will pass
-      z = TestStatisticHelper::initialize_with({ :distribution => "z",
-                              :p => 0.025 })
-      z.attributes.should be_instance_of(Hash)
-    end
-
-    it 'displays only attributes relevant to the particular distribution' do # This will pass
-      t = TestStatisticHelper::initialize_with({ :distribution => "t",
-                              :degrees_of_freedom => 20,
-                              :p => 0.05,
-                              :tail => 'right'
-                           })
-      t.attributes.should_not have_key(:tail)
-    end
-
-    it 'returns its distribution' do     # This will pass
-      z = TestStatisticHelper::initialize_with({ :distribution => :z,
-                              :alpha => 0.025 })
-      z.distribution.should be(:z)
-    end
-
-    it 'returns its degrees of freedom (except z and f)' do  # This will pass
-      t = TestStatisticHelper::initialize_with({ :distribution => :t,
-                             :p => 0.05,
-                             :degrees_of_freedom => 19 })
-      t.degrees_of_freedom.should be(19)
-    end
-
-    it 'returns its degrees_of_freedom (f)' do
-      f = TestStatisticHelper::initialize_with({ :distribution => :f,    # This will pass
-                                                 :p => 0.05,
-                                                 :tail => 'right',
-                                                 :degrees_of_freedom_1 => 8,
-                                                 :degrees_of_freedom_2 => 24 })
-      f.nu1.should be(8)
-      f.nu2.should be(24)
-    end
-
-    it 'returns nil when z-statistic asked for degrees of freedom' do 
-      z = TestStatisticHelper::initialize_with({ :distribution => :z,
-                              :p => 0.025 })
-      z.nu.should be(nil)
-    end
-
-    it 'returns its p-value when queried for p value' do         # This will pass
-      z = TestStatisticHelper::initialize_with({ :distribution => :z,
-                              :alpha => 0.05 })
-      z.p_value.should be(0.05)
-    end
-
-    it 'returns its tail when queried' do             # This will pass
-      chi2 = TestStatisticHelper::initialize_with({ :distribution => :chi2,
-                                 :alpha => 0.05,
-                                 :tail => 'left',
-                                 :degrees_of_freedom => 20 })
-      chi2.tail.should be('left')
-    end
-
-    ### MUTABILITY ###
-
-    it 'changes its value when attributes changed' do   # This will pass
-      chi2 = TestStatisticHelper::initialize_with({ :distribution => :chi2,
-                                 :alpha => 0.05,
-                                 :tail => 'left',
-                                 :degrees_of_freedom => 21
-                              })
-      chi2.should be_within(0.00005).of(11.5913)
-      chi2 = TestStatisticHelper::edit_attribute(chi2,'alpha',0.1)
-      chi2.should be_within(0.00005).of(13.2395)
-    end
-
-    it 'changes its value when degrees of freedom change' do  # This will pass
-      t = TestStatisticHelper::initialize_with({ :distribution => :t,
-                              :alpha => 0.05,
-                              :degrees_of_freedom => 15 })
-      t.abs.should be_within(0.0005).of(1.753)
-      t = TestStatisticHelper::edit_attribute(t,'nu',20)
-      t.abs.should be_within(0.0005).of(1.725)
-    end
-
-    ### CAN BE INSTANTIATED WITH A MINIMUM NUMBER OF PARAMETERS ###
-
-    ### Note: These functionalities have been put on the back burner due to
-    ###       limitations in the Distribution gem
-
-    ### Z ###
-    it 'instantiates a z-statistic using only alpha and value' do 
-      z = TestStatisticHelper::initialize_with({ :value => 1.96,
-                              :alpha => 0.025 })
-      z.distribution.should be(:z)
-    end
-
-    it 'instantiates a z-statistic using only value and distribution' do
-      z = TestStatisticHelper::initialize_with({ :value => 1.96,
-                              :distribution => :z })
-      z.p_value.should be_within(0.005).of(0.05)
-    end
-
-    ### T ###
-    it 'instantiates a t-statistic using only alpha, value, & distribution' do 
-      t = TestStatisticHelper::initialize_with( { :distribution => :t,
-                               :value => 1.691,
-                               :alpha => 0.05 })
-      t.degrees_of_freedom.should be(34)
-    end
-
-    it 'instantiates a t-statistic using value, distribution, and nu' do 
-      t = TestStatisticHelper::initialize_with( { :distribution => :t,
-                               :value => 1.691,
-                               :degrees_of_freedom => 34 })
-      t.alpha.should be_within(0.001).of(0.05)
-    end
-
-    it 'instantiates a t-statistic using alpha, value, and nu' do 
-      t = TestStatisticHelper::initialize_with({ :degrees_of_freedom => 34,
-                              :value => 1.691,
-                              :alpha => 0.05 })
-      t.distribution.should be(:t)
-    end
-
-    ### CHI-SQUARE ###
-
-    # Coming soon!
-
   end
 end
