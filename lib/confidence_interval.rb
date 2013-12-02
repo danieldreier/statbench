@@ -7,7 +7,7 @@ module ConfidenceInterval
   include Statsample
   include TestStatisticHelper
 
-  def confidence_interval(parameter,hash)
+  def confidence_interval(parameter='mean',hash)
     dataset_1        = hash[:dataset_1].to_scale if hash[:dataset_1]
     dataset_2        = hash[:dataset_2].to_scale if hash[:dataset_2]
     n1               = dataset_1.size if dataset_1
