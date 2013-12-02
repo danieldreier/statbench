@@ -8,6 +8,11 @@ module ConfidenceInterval
   describe ConfidenceInterval do 
     ALLOWABLE_ERROR = 0.00005
 
+    it 'assumes confidence level of 95% when not specified' do
+      result = ConfidenceInterval::confidence_interval('mean', { :data => LARGE_DATASET_1 })
+      result[:confidence_level].should eql(0.95)
+    end
+
     it 'includes confidence level in output' do 
       result = ConfidenceInterval::confidence_interval({ :data => LARGE_DATASET_1 })
       result.should have_key(:confidence_level)
