@@ -105,7 +105,8 @@ module ConfidenceInterval
 
     margin_of_error ||= test_stat.abs * std_error
 
-    { :confidence_level => confidence_level,
+    { :parameter        => 'mean',
+      :confidence_level => confidence_level,
       :margin_of_error  => margin_of_error,
       :lower            => lower || x_bar - margin_of_error,
       :upper            => upper || x_bar + margin_of_error
@@ -147,10 +148,11 @@ module ConfidenceInterval
     end
 
     margin_of_error = test_stat.abs * std_error 
-    { :confidence_level => confidence_level, 
-      :margin_of_error => margin_of_error,
-      :lower => sample_diff - margin_of_error,
-      :upper => sample_diff + margin_of_error 
+    { :parameter        => '2_mean',
+      :confidence_level => confidence_level, 
+      :margin_of_error  => margin_of_error,
+      :lower            => sample_diff - margin_of_error,
+      :upper            => sample_diff + margin_of_error 
     }
   end
 
@@ -187,7 +189,8 @@ module ConfidenceInterval
       wilson_interval = wilson_interval(n,p_hat,z)
     end
 
-    wilson_interval || { :confidence_level => confidence_level, 
+    wilson_interval || { :parameter => 'proportion',
+                         :confidence_level => confidence_level, 
                          :margin_of_error => margin_of_error, 
                          :lower => lower, 
                          :upper => upper }
@@ -204,7 +207,8 @@ module ConfidenceInterval
     z               = TestStatisticHelper::initialize_with({ :distribution => :z, :p => alpha })
     margin_of_error = z.abs * std_error
 
-    { :confidence_level => confidence_level,
+    { :parameter        => 'proportion',
+      :confidence_level => confidence_level,
       :margin_of_error  => margin_of_error,
       :lower            => sample_diff - margin_of_error,
       :upper            => sample_diff + margin_of_error
@@ -216,7 +220,12 @@ module ConfidenceInterval
     lower = n.quo(n + z2) * ( p_hat + z2.quo(2 * n) - z.abs * Math.sqrt((p_hat * (1 - p_hat)).quo(n) + z2.quo(4 * n ** 2)))
     upper = n.quo(n + z2) * ( p_hat + z2.quo(2 * n) + z.abs * Math.sqrt((p_hat * (1 - p_hat)).quo(n) + z2.quo(4 * n ** 2)))
     margin_of_error = (upper - lower).quo(2)
-    { :confidence_level => 1 - (2 * z.alpha), :margin_of_error => margin_of_error, :lower => lower, :upper => upper }
+    { :parameter        => 'proportion', 
+      :confidence_level => 1 - (2 * z.alpha), 
+      :margin_of_error  => margin_of_error, 
+      :lower            => lower, 
+      :upper            => upper 
+    }
   end
 
   ### VARIANCE AND STANDARD DEVIATION INTERVALS ### 
@@ -231,6 +240,7 @@ module ConfidenceInterval
 
   def sdev_interval(hash)
     interval = variance_interval(hash)
+    interval[:parameter] = 'standard_deviation'
     interval[:lower] = Math.sqrt(interval[:lower])
     interval[:upper] = Math.sqrt(interval[:upper]) if interval[:upper]
     interval[:margin_of_error] = 0.5*(interval[:upper] - interval[:lower]) if hash[:tail] == 'both'
@@ -264,9 +274,9 @@ module ConfidenceInterval
     when 'both'
       variance_interval_2t(hash)
     when 'left'
-      { :confidence_level => hash[:confidence_level], :lower => variance_floor(hash), :upper => nil }
+      { :parameter => 'variance', :confidence_level => hash[:confidence_level], :lower => variance_floor(hash), :upper => nil }
     when 'right'
-      { :confidence_level => hash[:confidence_level], :lower => 0, :upper => variance_ceiling(hash) }
+      { :parameter => 'variance', :confidence_level => hash[:confidence_level], :lower => 0, :upper => variance_ceiling(hash) }
     else
       raise(ArgumentError,"Error: Please specify tail 'left', 'right', or 'both'")
     end
@@ -289,6 +299,10 @@ module ConfidenceInterval
     lower = variance * df / chi2_lower
     upper = variance * df / chi2_upper
     margin_of_error = (upper - lower) / 2
-    { :confidence_level => confidence_level, :margin_of_error => margin_of_error, :lower => lower, :upper => upper }
+    { :parameter        => 'variance', 
+      :confidence_level => confidence_level, 
+      :margin_of_error  => margin_of_error, 
+      :lower            => lower, 
+      :upper            => upper }
   end
 end
