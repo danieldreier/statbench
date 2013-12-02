@@ -5,6 +5,7 @@ require_relative 'test_statistic'
 
 module ConfidenceInterval
   include Statsample
+  include TestStatisticHelper
 
   def confidence_interval(parameter,hash)
     dataset_1        = hash[:dataset_1].to_scale if hash[:dataset_1]
