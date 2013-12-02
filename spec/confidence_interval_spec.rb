@@ -157,23 +157,21 @@ module ConfidenceInterval
           end # 'differentiates between left- and right-tailed intervals'
 
           it 'generates a right-tailed interval for standard deviation' do
-            # In its current form this test actually demands, and receives, a maximum value
-            # for sigma rather than an interval. This is one of several issues with the 
-            # CI module slated to be rectified very soon.
             result = ConfidenceInterval::confidence_interval( :standard_deviation,
                                                             { :data             => LARGE_DATASET_1,
                                                               :tail             => 'right',
                                                               :confidence_level => 0.95 })
-            result.should be_within(ALLOWABLE_ERROR).of(71.6374)
+            result[:lower].should be_nil
+            result[:upper].should be_within(ALLOWABLE_ERROR).of(71.6374)
           end # 'generates a right-tailed interval for standard deviation'
 
           it 'generates a left-tailed interval for standard deviation' do 
-            # The comment under right-tailed applies to this as well
             result = ConfidenceInterval::confidence_interval( :standard_deviation,
                                                             { :data             => LARGE_DATASET_1,
                                                               :tail             => 'left',
                                                               :confidence_level => 0.95 })
-            result.should be_within(ALLOWABLE_ERROR).of(54.5774)
+            result[:lower].should be_within(ALLOWABLE_ERROR).of(54.5774)
+            result[:upper].should be_nil
           end # 'generates a left-tailed interval for standard deviation' 
         end # 'one-tailed'
       end # 'standard deviation confidence interval'
