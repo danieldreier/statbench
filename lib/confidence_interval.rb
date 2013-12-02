@@ -6,7 +6,7 @@ module ConfidenceInterval
   include Statsample
   include TestStatisticHelper
 
-  def confidence_interval(parameter='mean',hash)
+  def confidence_interval(parameter=:mean,hash)
     dataset_1        = hash[:dataset_1].to_scale if hash[:dataset_1]
     dataset_2        = hash[:dataset_2].to_scale if hash[:dataset_2]
     n1               = dataset_1.size if dataset_1
@@ -29,7 +29,7 @@ module ConfidenceInterval
     end
 
     case parameter
-    when 'mean'
+    when :mean
       param_hash[:known_sigma] = true if (hash[:sigma_1] && hash[:sigma_2]) || hash[:sigma]
 
       if dataset_1
@@ -43,7 +43,7 @@ module ConfidenceInterval
         single_mean_interval(param_hash)
       end
 
-    when 'proportion'
+    when :proportion
       if dataset_1
         param_hash[:p_hat_1] = dataset_1.count(1).quo( dataset_1.size ).to_f
         param_hash[:p_hat_2] = dataset_2.count(1).quo( dataset_2.size ).to_f
@@ -53,11 +53,11 @@ module ConfidenceInterval
         single_proportion_interval(param_hash)
       end
 
-    when 'standard deviation'
+    when :standard_deviation
       param_hash[:variance] = (data.standard_deviation_sample()) ** 2
       sdev_interval(param_hash)
 
-    when 'variance' 
+    when :variance 
       param_hash[:variance] = (data.standard_deviation_sample) ** 2
       variance_interval(param_hash)
 
@@ -105,7 +105,7 @@ module ConfidenceInterval
 
     margin_of_error ||= test_stat.abs * std_error
 
-    { :parameter        => 'mean',
+    { :parameter        => :mean,
       :confidence_level => confidence_level,
       :margin_of_error  => margin_of_error,
       :lower            => lower || x_bar - margin_of_error,
@@ -189,7 +189,7 @@ module ConfidenceInterval
       wilson_interval = wilson_interval(n,p_hat,z)
     end
 
-    wilson_interval || { :parameter => 'proportion',
+    wilson_interval || { :parameter => :proportion,
                          :confidence_level => confidence_level, 
                          :margin_of_error => margin_of_error, 
                          :lower => lower, 
@@ -207,7 +207,7 @@ module ConfidenceInterval
     z               = TestStatisticHelper::initialize_with({ :distribution => :z, :p => alpha })
     margin_of_error = z.abs * std_error
 
-    { :parameter        => 'proportion',
+    { :parameter        => :proportion,
       :confidence_level => confidence_level,
       :margin_of_error  => margin_of_error,
       :lower            => sample_diff - margin_of_error,
@@ -220,7 +220,7 @@ module ConfidenceInterval
     lower = n.quo(n + z2) * ( p_hat + z2.quo(2 * n) - z.abs * Math.sqrt((p_hat * (1 - p_hat)).quo(n) + z2.quo(4 * n ** 2)))
     upper = n.quo(n + z2) * ( p_hat + z2.quo(2 * n) + z.abs * Math.sqrt((p_hat * (1 - p_hat)).quo(n) + z2.quo(4 * n ** 2)))
     margin_of_error = (upper - lower).quo(2)
-    { :parameter        => 'proportion', 
+    { :parameter        => :proportion, 
       :confidence_level => 1 - (2 * z.alpha), 
       :margin_of_error  => margin_of_error, 
       :lower            => lower, 
@@ -274,9 +274,9 @@ module ConfidenceInterval
     when 'both'
       variance_interval_2t(hash)
     when 'left'
-      { :parameter => 'variance', :confidence_level => hash[:confidence_level], :lower => variance_floor(hash), :upper => nil }
+      { :parameter => :variance, :confidence_level => hash[:confidence_level], :lower => variance_floor(hash), :upper => nil }
     when 'right'
-      { :parameter => 'variance', :confidence_level => hash[:confidence_level], :lower => 0, :upper => variance_ceiling(hash) }
+      { :parameter => :variance, :confidence_level => hash[:confidence_level], :lower => 0, :upper => variance_ceiling(hash) }
     else
       raise(ArgumentError,"Error: Please specify tail 'left', 'right', or 'both'")
     end
@@ -299,7 +299,7 @@ module ConfidenceInterval
     lower = variance * df / chi2_lower
     upper = variance * df / chi2_upper
     margin_of_error = (upper - lower) / 2
-    { :parameter        => 'variance', 
+    { :parameter        => :variance, 
       :confidence_level => confidence_level, 
       :margin_of_error  => margin_of_error, 
       :lower            => lower, 
