@@ -5,6 +5,7 @@ require_relative 'test_statistic'
 module ConfidenceInterval
   include Statsample
   include TestStatisticHelper
+  include HypothesisTest
 
   def confidence_interval(hash)
     dataset_1        = hash[:dataset_1].to_scale if hash[:dataset_1]
@@ -68,8 +69,16 @@ module ConfidenceInterval
   end
 
   ### MEAN INTERVALS ###
-  def equal_sigma?(n1,s1,n2,s2)
-    # this will call a method from HypothesisTest!
+  def equal_sigma?(dataset_1,dataset_2,significance_level=0.05)
+    test = HypothesisTest::test({ :param => :variance, 
+                                  :sig_level => significance_level, 
+                                  :dataset_1 => dataset_1, 
+                                  :dataset_2 => dataset_2 })
+    if test[:reject_left] == true || test[:reject_right] == true
+      false
+    else
+      true
+    end
   end
 
   def pooled_variance(nu1,var1,nu2,var2)
