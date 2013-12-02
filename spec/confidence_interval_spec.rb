@@ -8,9 +8,23 @@ module ConfidenceInterval
   describe ConfidenceInterval do 
     ALLOWABLE_ERROR = 0.00005
 
+    it 'includes confidence level in output' do 
+      result = ConfidenceInterval::confidence_interval({ :data => LARGE_DATASET_1 })
+      result.should have_key(:confidence_level)
+    end
+
     it 'assumes confidence level of 95% when not specified' do
       result = ConfidenceInterval::confidence_interval('mean', { :data => LARGE_DATASET_1 })
       result[:confidence_level].should eql(0.95)
+    end
+
+    it 'uses user-specified confidence level when such exists' do 
+      result = ConfidenceInterval::confidence_level( 'mean', 
+                                                   { :data => LARGE_DATASET_1,
+                                                     :confidence_level => 0.9 })
+      result[:lower].should be_within(ALLOWABLE_ERROR).of(-3.5657)
+      result[:upper].should be_within(ALLOWABLE_ERROR).of(20.2324)
+      result[:confidence_level].should eql(0.9)
     end
 
     it 'assumes mean as parameter when not specified' do 
@@ -19,11 +33,6 @@ module ConfidenceInterval
         result[:parameter].should eql('mean')
       end
     end
-
-    it 'includes confidence level in output' do 
-      result = ConfidenceInterval::confidence_interval({ :data => LARGE_DATASET_1 })
-      result.should have_key(:confidence_level)
-    end # 'includes confidence level in output'
 
     describe 'interval for a single-population parameter' do 
      it 'treats dependent data sets as a single sample' do 
@@ -81,7 +90,7 @@ module ConfidenceInterval
             it 'generates a mean confidence interval' do 
               result = ConfidenceInterval::confidence_interval( 'mean',
                                                               { :data            => LARGE_DATASET_1,
-                                                                :population_size => 1000})
+                                                                :population_size => 1000 })
               result[:lower].should be_within(ALLOWABLE_ERROR).of(-5.3563)
               result[:upper].should be_within(ALLOWABLE_ERROR).of(22.0230)
             end # 'generates a mean confidence interval'
