@@ -14,12 +14,12 @@ module ConfidenceInterval
     end
 
     it 'assumes confidence level of 95% when not specified' do
-      result = ConfidenceInterval::confidence_interval('mean', { :data => LARGE_DATASET_1 })
+      result = ConfidenceInterval::confidence_interval(:mean, { :data => LARGE_DATASET_1 })
       result[:confidence_level].should eql(0.95)
     end
 
     it 'uses user-specified confidence level when such exists' do 
-      result = ConfidenceInterval::confidence_level( 'mean', 
+      result = ConfidenceInterval::confidence_level( :mean, 
                                                    { :data => LARGE_DATASET_1,
                                                      :confidence_level => 0.9 })
       result[:lower].should be_within(ALLOWABLE_ERROR).of(-3.5657)
@@ -29,12 +29,12 @@ module ConfidenceInterval
 
     it 'assumes mean as parameter when not specified' do 
       result = ConfidenceInterval::confidence_interval( { :data => LARGE_DATASET_1 })
-      result[:parameter].should eql('mean')
+      result[:parameter].should eql(:mean)
     end
 
     describe 'interval for a single-population parameter' do 
      it 'treats dependent data sets as a single sample' do 
-        result = ConfidenceInterval::confidence_interval( 'mean',
+        result = ConfidenceInterval::confidence_interval( :mean,
                                                         { :dataset_1        => SMALL_DATASET_3,
                                                           :dataset_2        => SMALL_DATASET_4,
                                                           :confidence_level => 0.99 },
@@ -48,7 +48,7 @@ module ConfidenceInterval
           # i.e., known sigma; unimodal, symmetrical dist. OR n > 60
           context 'without population size given' do 
             it 'generates mean confidence interval' do 
-              result = ConfidenceInterval::confidence_interval( 'mean',
+              result = ConfidenceInterval::confidence_interval( :mean,
                                                               { :data             => LARGE_DATASET_1,
                                                                 :confidence_level => 0.95,
                                                                 :sigma            => 55 })
@@ -59,7 +59,7 @@ module ConfidenceInterval
 
           context 'with population size given' do 
             it 'generates accurate mean confidence interval' do 
-              result = ConfidenceInterval::confidence_interval( 'mean',
+              result = ConfidenceInterval::confidence_interval( :mean,
                                                               { :data             => LARGE_DATASET_1,
                                                                 :confidence_level => 0.95,
                                                                 :sigma            => 55,
@@ -75,7 +75,7 @@ module ConfidenceInterval
           # distribution still assumed to be unimodal and symmetrical
           context 'without population size given' do 
             it 'generates a mean confidence interval' do 
-              result = ConfidenceInterval::confidence_interval( 'mean', 
+              result = ConfidenceInterval::confidence_interval( :mean, 
                                                               { :data             => SMALL_DATASET_1,
                                                                 :sigma            => 55,
                                                                 :confidence_level => 0.95 })
@@ -86,7 +86,7 @@ module ConfidenceInterval
 
           context 'with population size given' do 
             it 'generates a mean confidence interval' do 
-              result = ConfidenceInterval::confidence_interval( 'mean',
+              result = ConfidenceInterval::confidence_interval( :mean,
                                                               { :data            => LARGE_DATASET_1,
                                                                 :population_size => 1000 })
               result[:lower].should be_within(ALLOWABLE_ERROR).of(-5.3563)
@@ -104,7 +104,7 @@ module ConfidenceInterval
           # => Sample can constitute no more than 10% of the population
           context 'without population size given' do 
             it 'generates a z-interval for proportion' do 
-              result = ConfidenceInterval::confidence_interval( 'proportion',
+              result = ConfidenceInterval::confidence_interval( :proportion,
                                                               { :data => LARGE_BINOMIAL_DATASET_1 })
               result[:lower].should be_within(ALLOWABLE_ERROR).of(0.3935)
               result[:upper].should be_within(ALLOWABLE_ERROR).of(0.6198)
@@ -113,7 +113,7 @@ module ConfidenceInterval
 
           context 'with population size given' do 
             it 'generates a z-interval for proportion' do 
-              result = ConfidenceInterval::confidence_interval( 'proportion',
+              result = ConfidenceInterval::confidence_interval( :proportion,
                                                               { :data             => LARGE_BINOMIAL_DATASET_1,
                                                                 :population_size  => 1000,
                                                                 :confidence_level => 0.99 })
@@ -125,7 +125,7 @@ module ConfidenceInterval
 
         context 'not meeting z criteria' do 
           it 'generates a Wilson interval for proportion' do 
-            result = ConfidenceInterval::confidence_interval( 'proportion',
+            result = ConfidenceInterval::confidence_interval( :proportion,
                                                             { :data => SMALL_BINOMIAL_DATASET_1 })
             result[:lower].should be_within(ALLOWABLE_ERROR).of(0.3575)
             result[:upper].should be_within(ALLOWABLE_ERROR).of(0.8018)
@@ -136,7 +136,7 @@ module ConfidenceInterval
       describe 'standard deviation confidence interval' do 
         context 'two-tailed' do 
           it 'generates a chi-square interval for standard deviation' do 
-            result = ConfidenceInterval::confidence_interval( 'standard deviation',
+            result = ConfidenceInterval::confidence_interval( :standard_deviation,
                                                               { :data => LARGE_DATASET_1,
                                                                 :tail => 'both',
                                                                 :confidence_level => 0.95 })
@@ -147,10 +147,10 @@ module ConfidenceInterval
 
         context 'one-tailed' do 
           it 'differentiates between left- and right-tailed tests' do 
-            result_1 = ConfidenceInterval::confidence_interval( 'standard deviation',
+            result_1 = ConfidenceInterval::confidence_interval( :standard_deviation,
                                                               { :data => LARGE_DATASET_1,
                                                                 :tail => 'left' })
-            result_2 = ConfidenceInterval::confidence_interval( 'standard deviation',
+            result_2 = ConfidenceInterval::confidence_interval( :standard_deviation,
                                                               { :data => LARGE_DATASET_1,
                                                                 :tail => 'right' })
             result_1.should_not eql(result_2)
@@ -160,7 +160,7 @@ module ConfidenceInterval
             # In its current form this test actually demands, and receives, a maximum value
             # for sigma rather than an interval. This is one of several issues with the 
             # CI module slated to be rectified very soon.
-            result = ConfidenceInterval::confidence_interval( 'standard deviation',
+            result = ConfidenceInterval::confidence_interval( :standard_deviation,
                                                             { :data             => LARGE_DATASET_1,
                                                               :tail             => 'right',
                                                               :confidence_level => 0.95 })
@@ -169,7 +169,7 @@ module ConfidenceInterval
 
           it 'generates a left-tailed interval for standard deviation' do 
             # The comment under right-tailed applies to this as well
-            result = ConfidenceInterval::confidence_interval( 'standard_deviation',
+            result = ConfidenceInterval::confidence_interval( :standard_deviation,
                                                             { :data             => LARGE_DATASET_1,
                                                               :tail             => 'left',
                                                               :confidence_level => 0.95 })
@@ -183,7 +183,7 @@ module ConfidenceInterval
       describe 'difference between two means' do 
         context 'meeting z criteria' do 
           it 'generates a z interval for difference between two means' do 
-            result = ConfidenceInterval::confidence_interval( 'mean', 
+            result = ConfidenceInterval::confidence_interval( :mean, 
                                                             { :dataset_1        => LARGE_DATASET_1,
                                                               :dataset_2        => LARGE_DATASET_2,
                                                               :sigma_1          => 60,
@@ -198,7 +198,7 @@ module ConfidenceInterval
         context 'not meeting z criteria' do 
           context 'unknown sigmas presumed equal, large samples' do 
             it 'generates a t-interval for difference between two means' do 
-                result = ConfidenceInterval::confidence_interval( 'mean', 
+                result = ConfidenceInterval::confidence_interval( :mean, 
                                                                 { :dataset_1        => LARGE_DATASET_2,
                                                                   :dataset_2        => LARGE_DATASET_3,
                                                                   :confidence_level => 0.99 
@@ -210,7 +210,7 @@ module ConfidenceInterval
 
           context 'known sigmas, small samples' do 
             it 'generates a t-interval for difference between two means' do 
-              result = ConfidenceInterval::confidence_interval( 'mean', 
+              result = ConfidenceInterval::confidence_interval( :mean, 
                                                               { :dataset_1        => SMALL_DATASET_2,
                                                                 :dataset_2        => SMALL_DATASET_3,
                                                                 :sigma_1          => 35,
@@ -233,7 +233,7 @@ module ConfidenceInterval
       describe 'difference between two proportions' do 
         context 'meeting z criteria' do 
           it 'generates interval for difference between two proportions' do 
-            result = ConfidenceInterval::confidence_interval( 'proportion',
+            result = ConfidenceInterval::confidence_interval( :proportion,
                                                             { :dataset_1        => LARGE_BINOMIAL_DATASET_1,
                                                               :dataset_2        => LARGE_BINOMIAL_DATASET_2,
                                                               :confidence_level => 0.95 })
