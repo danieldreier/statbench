@@ -28,10 +28,8 @@ module ConfidenceInterval
     end
 
     it 'assumes mean as parameter when not specified' do 
-      pending 'addition of :parameter key to hashes within module' do 
-        result = ConfidenceInterval::confidence_interval( { :data => LARGE_DATASET_1 })
-        result[:parameter].should eql('mean')
-      end
+      result = ConfidenceInterval::confidence_interval( { :data => LARGE_DATASET_1 })
+      result[:parameter].should eql('mean')
     end
 
     describe 'interval for a single-population parameter' do 
