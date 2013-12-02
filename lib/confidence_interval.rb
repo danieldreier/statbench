@@ -28,8 +28,8 @@ module ConfidenceInterval
       } 
     end
 
-    case parameter
-    when :mean
+    case hash[:parameter]
+    when :mean || nil
       param_hash[:known_sigma] = true if (hash[:sigma_1] && hash[:sigma_2]) || hash[:sigma]
 
       if dataset_1
