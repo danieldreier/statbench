@@ -1,6 +1,5 @@
 require 'statsample'
 require 'distribution'
-require_relative 'test_statistic_helper'
 require_relative 'test_statistic'
 
 module ConfidenceInterval
