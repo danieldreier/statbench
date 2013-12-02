@@ -38,8 +38,7 @@ module ConfidenceInterval
         result = ConfidenceInterval::confidence_interval({ :parameter        => :mean,
                                                            :dataset_1        => SMALL_DATASET_3,
                                                            :dataset_2        => SMALL_DATASET_4,
-                                                           :confidence_level => 0.99 },
-                                                            true )
+                                                           :confidence_level => 0.99 })
         result[:lower].should be_within(ALLOWABLE_ERROR).of(-40.5397)
         result[:upper].should be_within(ALLOWABLE_ERROR).of(42.0397)
       end # 'treats dependent data sets as a single sample'
