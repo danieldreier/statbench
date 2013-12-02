@@ -12,7 +12,7 @@ module HypothesisTest
     @sig_level = hash[:significance] || 0.05
 
     case @param 
-    when :mean then test_mean(@data_1,@data_2,@sig_level);
+    when :mean || nil then test_mean(@data_1,@data_2,@sig_level);
     when :proportion then test_proportion(@data_1,@data_2,@sig_level);
     when :variance then test_variance(@data_1,@data_2,@sig_level);
     when :sdev then test_variance(@data_1,@data_2,@sig_level,true); end
