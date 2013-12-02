@@ -13,6 +13,13 @@ module ConfidenceInterval
       result[:confidence_level].should eql(0.95)
     end
 
+    it 'assumes mean as parameter when not specified' do 
+      pending 'addition of :parameter key to hashes within module' do 
+        result = ConfidenceInterval::confidence_interval( { :data => LARGE_DATASET_1 })
+        result[:parameter].should eql('mean')
+      end
+    end
+
     it 'includes confidence level in output' do 
       result = ConfidenceInterval::confidence_interval({ :data => LARGE_DATASET_1 })
       result.should have_key(:confidence_level)
