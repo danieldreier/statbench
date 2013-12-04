@@ -13,7 +13,7 @@ class TestStatistic
         (z * 1.5).should be_instance_of(Numeric)
       end
 
-      it 'can be initialized with :p or :alpha as probability of Type I error' do 
+      it 'can be initialized with :p, :alpha, or :significance_level as probability of Type I error' do 
         z1 = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                     :p            => 0.025 })
         z2 = TestStatisticHelper::initialize_with({ :distribution => :z,
@@ -25,7 +25,7 @@ class TestStatistic
         z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                     :p            => 0.025 })
         absolute_value = z.abs 
-        absolute_value.should_not be_instance_of(Float)
+        absolute_value.should be_instance_of(TestStatistic)
       end
     end
 
