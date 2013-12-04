@@ -16,6 +16,7 @@ class TestStatistic < DelegateClass(Float)
 
   alias_method :alpha, :p   
   alias_method :p_value, :p
+  alias_method :significance_level, :p
 
   def initialize(value)
     @value = __setobj__(value)
@@ -26,13 +27,16 @@ class TestStatistic < DelegateClass(Float)
 
     # These attributes are valid for all distributions
     @attributes[:value] ||= @value
-    @attributes[:p] = @attributes.delete(:alpha) if @attributes[:alpha] # Standardize nomenclature
-
+    @p = @attributes[:p] ||= if @attributes[:alpha] 
+      @attributes.delete(:alpha) 
+    elsif @attributes[:significance_level] # Standardize nomenclature
+      @attributes.delete[:significance_level]
+    end
     @p = @attributes[:p]
     @distribution = @attributes[:distribution]
 
     # These attributes are valid only for some distributions
-    if @distribution == :z || @distribution == :chi2
+    if @distribution == :t || @distribution == :chi2
       @nu = @attributes[:degrees_of_freedom]
     else
       @attributes.delete(:degrees_of_freedom) if @attributes.has_key?(:degrees_of_freedom)
