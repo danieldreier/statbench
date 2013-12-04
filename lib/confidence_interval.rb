@@ -74,12 +74,7 @@ module ConfidenceInterval
                                   :sig_level => significance_level, 
                                   :dataset_1 => dataset_1, 
                                   :dataset_2 => dataset_2 })
-    if test[:reject_left] == true || test[:reject_right] == true
-      false
-    else
-      true
-    end
-  end
+    true unless (test[:reject_left] == true || test[:reject_right] == true); end
 
   def pooled_variance(nu1,var1,nu2,var2)
     (nu1 * var1 + nu2 * var2) / (nu1 + nu2)
