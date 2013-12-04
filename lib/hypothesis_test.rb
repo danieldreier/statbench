@@ -88,7 +88,3 @@ module HypothesisTest
     }
   end
 end
-
-include HypothesisTest
-p HypothesisTest::test({ :dataset_1 => SMALL_DATASET_3, :dataset_2 => SMALL_DATASET_2, :parameter => :variance, :significance => 0.05 })
-p HypothesisTest::test({ :dataset_1 => SMALL_DATASET_3, :dataset_2 => SMALL_DATASET_2, :parameter => :sdev, :significance => 0.05 })
