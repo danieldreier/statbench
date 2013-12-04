@@ -17,6 +17,9 @@ class TestStatistic < DelegateClass(Float)
   alias_method :alpha, :p   
   alias_method :p_value, :p
   alias_method :significance_level, :p
+  alias_method :degrees_of_freedom, :nu 
+  alias_method :degrees_of_freedom_1, :nu1
+  alias_method :degrees_of_freedom_2, :nu2
 
   def initialize(value)
     @value = __setobj__(value)
@@ -55,20 +58,6 @@ class TestStatistic < DelegateClass(Float)
       @attributes.delete(:degrees_of_freedom_1) if @attributes.has_key?(:degrees_of_freedom_1)
       @attributes.delete(:degrees_of_freedom_2) if @attributes.has_key?(:degrees_of_freedom_2)
     end
-  end
-
-  def degrees_of_freedom
-    if @distribution == :f || @distribution == :z then nil; else self.nu(); end
-  end
-
-  def degrees_of_freedom_1
-    raise('Error: Attribute valid only for F distribution') unless self.distribution == :f
-    self.nu1()
-  end
-
-  def degrees_of_freedom_2
-    raise('Error: Attribute valid only for F distribution') unless self.distribution == :f
-    self.nu2()
   end
 end
 
