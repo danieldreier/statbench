@@ -70,6 +70,7 @@ module ConfidenceInterval
 
   ### MEAN INTERVALS ###
   def equal_sigma?(dataset_1,dataset_2,significance_level=0.05)
+    # This is pending further development of the HypothesisTest module! :(
     test = HypothesisTest::test({ :param => :variance, 
                                   :sig_level => significance_level, 
                                   :dataset_1 => dataset_1, 
