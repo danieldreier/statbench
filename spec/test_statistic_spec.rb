@@ -20,6 +20,13 @@ class TestStatistic
                                                     :alpha        => 0.025 })
         z1.should eql(z2)
       end
+
+      it 'can use absolute value method without reverting to plain old float' do 
+        z = TestStatisticHelper::initialize_with({ :distribution => :z,
+                                                    :p            => 0.025 })
+        absolute_value = z.abs 
+        absolute_value.should_not be_instance_of(Float)
+      end
     end
 
     describe 'attribute reader' do 
