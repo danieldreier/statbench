@@ -18,7 +18,7 @@ class TestStatistic
                                                     :p            => 0.025 })
         z2 = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                     :alpha        => 0.025 })
-        z1.should == z2
+        z1.should eql(z2)
       end
     end
 
