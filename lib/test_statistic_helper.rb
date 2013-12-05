@@ -3,7 +3,7 @@ require 'statistics2'
 
 module TestStatisticHelper
   include Distribution
-  include Statistics2
+ include Statistics2
 
   ## Initialization methods 
 
@@ -58,7 +58,7 @@ module TestStatisticHelper
 
   def initialize_t(hash)
     # Set the value of the test statistic based on whatever information is
-    # given in the hash.
+    # given in the hash.test
     if hash[:value]
       output = TestStatistic.new(t=hash[:value]) 
       if hash[:degrees_of_freedom]
@@ -116,10 +116,7 @@ module TestStatisticHelper
     raise(ArgumentError,"Error: Value must be instance of TestStatistic class") unless statistic.is_a?(TestStatistic)
     attribute_hash = statistic.attributes
     attribute_hash.delete(:value)
-    action = lambda do |key,var|
-      var = new_attribute_value
-      attribute_hash[key] = var
-    end
+    action = lambda { |key,var| attribute_hash[key] = var = new_attribute_value }
     error_message = 'Error: Invalid attribute for test statistic distribution'
 
     case
