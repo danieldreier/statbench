@@ -12,6 +12,10 @@ class DataAnalyst
   def equal_response_time?
     @dataset_1.mean == @dataset_2.mean
   end
+
+  def mean_difference
+    @dataset_1.mean - @dataset_2.mean
+  end
 end
 
 
