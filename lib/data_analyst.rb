@@ -4,10 +4,10 @@ require_relative '../spec/data'
 class DataAnalyst
   include Statsample
 
-  attr_reader :array
+  attr_reader :data
 
   def initialize(array)
-    @array = array
+    @data = if array.class == Vector then array; else array.to_scale; end
   end
 end
 
