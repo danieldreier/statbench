@@ -13,6 +13,10 @@ class DataAnalyst
     @dataset_1.mean == @dataset_2.mean
   end
 
+  def equal_variability?
+    @dataset_1.standard_deviation_sample == @dataset_2.standard_deviation_sample
+  end
+
   def mean_difference
     @dataset_1.mean - @dataset_2.mean
   end
