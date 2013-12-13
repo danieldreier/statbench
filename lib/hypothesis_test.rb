@@ -11,7 +11,7 @@ module HypothesisTest
   end
 
   def equal_variability?(data1=@dataset_1,data2=@dataset_2)
-    data1.standard_deviation_sample == data2.standard_deviation_sample
+    true unless variance_hypothesis_test(data1,data2)
   end
 
   def mean_hypothesis_test(data1,data2)
@@ -25,6 +25,26 @@ module HypothesisTest
                                                       :p=>0.025,
                                                       :degrees_of_freedom=>df)
     true if t_star.abs >= t_critical.abs
+  end
+
+  def variance_hypothesis_test(data1,data2)
+    df1 = data1.size - 1
+    df2 = data2.size - 1
+    var1 = (data1.standard_deviation_sample) ** 2
+    var2 = (data2.standard_deviation_sample) ** 2
+    alpha = 0.05
+    f_star = var1.quo(var2)
+    f_critical_1 = TestStatisticHelper::initialize_with(:distribution        =>:f,
+                                                        :p                   =>alpha / 2,
+                                                        :tail                =>'right',
+                                                        :degrees_of_freedom_1=>df1,
+                                                        :degrees_of_freedom_2=>df2)
+    f_critical_2 = TestStatisticHelper::initialize_with(:distribution        =>:f,
+                                                        :p                   =>alpha / 2,
+                                                        :tail                =>'left',
+                                                        :degrees_of_freedom_1=>df1,
+                                                        :degrees_of_freedom_2=>df2)
+    true if f_star > f_critical_1 || f_star < f_critical_2
   end
 end
 
