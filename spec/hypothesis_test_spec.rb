@@ -8,6 +8,11 @@ describe HypothesisTest do
         processor = DataAnalyst.new(DATASET_1,DATASET_2)
         expect(processor.equal_response_time?).to be_false
       end
-    end
+
+      it 'returns true when response times are equal' do 
+        processor = DataAnalyst.new(DATASET_1,DATASET_1)
+        expect(processor.equal_response_time?).to be_true
+      end
+    end # '#equal_response_time?'
   end # 'testing two means'
 end # 'describe HypothesisTest'
