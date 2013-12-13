@@ -17,7 +17,7 @@ describe HypothesisTest do
 
     describe '#equal_variability?' do 
       it 'returns false when variability is unequal' do 
-        processor = DataAnalyst.new(DATASET_1,DATASET_2)
+        processor = DataAnalyst.new(DATASET_1,DATASET_3)
         expect(processor.equal_variability?).to be_false
       end
 
