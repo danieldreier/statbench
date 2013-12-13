@@ -11,10 +11,6 @@ class DataAnalyst
     @dataset_1 = if data1.class == Vector then data1; else data1.to_scale; end
     @dataset_2 = if data2.class == Vector then data2; else data2.to_scale; end
   end
-
-  def sdev_difference
-    @dataset_1.standard_deviation_sample - @dataset_2.standard_deviation_sample
-  end
 end
 
 #   def set_variables(array)
