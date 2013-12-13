@@ -5,7 +5,7 @@ describe HypothesisTest do
   describe 'testing two means' do 
     describe '#equal_response_time?' do 
       it 'returns false when response times unequal' do 
-        processor = DataAnalyst.new(DATASET_1,DATASET_2)
+        processor = DataAnalyst.new(DATASET_1,DATASET_3)
         expect(processor.equal_response_time?).to be_false
       end
 
