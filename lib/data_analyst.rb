@@ -20,8 +20,11 @@ class DataAnalyst
   def mean_difference
     @dataset_1.mean - @dataset_2.mean
   end
-end
 
+  def sdev_difference
+    @dataset_1.standard_deviation_sample - @dataset_2.standard_deviation_sample
+  end
+end
 
 #   def set_variables(array)
 #     array.each do |data|
