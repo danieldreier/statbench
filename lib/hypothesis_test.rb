@@ -6,11 +6,11 @@ module HypothesisTest
   include Statsample
   include TestStatisticHelper
 
-  def equal_response_time?(data1=@dataset_1,data2=@dataset_2)
+  def equal_response_time?(data1=@data1,data2=@data2)
     true unless mean_hypothesis_test(data1,data2)
   end
 
-  def equal_variability?(data1=@dataset_1,data2=@dataset_2)
+  def equal_variability?(data1=@data1,data2=@data2)
     true unless variance_hypothesis_test(data1,data2)
   end
 
