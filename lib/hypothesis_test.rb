@@ -14,18 +14,19 @@ module HypothesisTest
     true unless variance_hypothesis_test(hash)
   end
 
+  def get_variables(hash)
+    hash.each do |key,value|
+      name = '@' + key
+      instance_variable_set(name,value)
+    end
+  end
+
   def mean_hypothesis_test(hash)
-    n1     = hash['nu1'] + 1
-    n2     = hash['nu2'] + 1
-    df     = n1 + n2 - 2
-    mean1  = hash['mean1']
-    mean2  = hash['mean2']
-    var1   = hash['var1']
-    var2   = hash['var2']
-    t_star = (mean1 - mean2).quo(Math.sqrt(var1 / n1 + var2 / n2))
+    get_variables(hash)
+    t_star = (@mean1 - @mean2).quo(Math.sqrt(@var1 / (@nu1 + 1) + @var2 / (@nu2 + 1)))
     t_critical = TestStatisticHelper::initialize_with(:distribution=>:t,
                                                       :p=>0.025,
-                                                      :degrees_of_freedom=>df)
+                                                      :degrees_of_freedom=>@nu1 + @nu2)
     true if t_star.abs >= t_critical.abs
   end
 
