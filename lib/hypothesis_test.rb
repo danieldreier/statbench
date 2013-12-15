@@ -48,10 +48,4 @@ module HypothesisTest
   end
 end
 
-include HypothesisTest
-include Statsample
-data1 = DATASET_1.to_scale
-data2 = DATASET_2.to_scale
-p "Difference = #{data1.mean - data2.mean}"
-p "Data Set 1 Standard Deviation = #{data1.standard_deviation_sample}"
-p "Data Set 2 Standard Deviation = #{data2.standard_deviation_sample}"
+include HypothesisTest # I have no idea why this is required for it not to throw errors
