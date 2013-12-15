@@ -31,22 +31,19 @@ module HypothesisTest
   end
 
   def variance_hypothesis_test(hash)
-    df1 = hash['nu1']
-    df2 = hash['nu2']
-    var1 = hash['var1']
-    var2 = hash['var2']
+    get_variables(hash)
     alpha = 0.05
-    f_star = var1.quo(var2)
+    f_star = @var1.quo(@var2)
     f_critical_1 = TestStatisticHelper::initialize_with(:distribution        =>:f,
                                                         :p                   =>alpha / 2,
                                                         :tail                =>'right',
-                                                        :degrees_of_freedom_1=>df1,
-                                                        :degrees_of_freedom_2=>df2)
+                                                        :degrees_of_freedom_1=>@nu1,
+                                                        :degrees_of_freedom_2=>@nu2)
     f_critical_2 = TestStatisticHelper::initialize_with(:distribution        =>:f,
                                                         :p                   =>alpha / 2,
                                                         :tail                =>'left',
-                                                        :degrees_of_freedom_1=>df1,
-                                                        :degrees_of_freedom_2=>df2)
+                                                        :degrees_of_freedom_1=>@nu1,
+                                                        :degrees_of_freedom_2=>@nu2)
     true if f_star > f_critical_1 || f_star < f_critical_2
   end
 end
