@@ -6,20 +6,22 @@ module HypothesisTest
   include Statsample
   include TestStatisticHelper
 
-  def equal_response_time?(data1=@data1,data2=@data2)
-    true unless mean_hypothesis_test(data1,data2)
+  def equal_response_time?(hash=@hash)
+    true unless mean_hypothesis_test(hash)
   end
 
   def equal_variability?(data1=@data1,data2=@data2)
     true unless variance_hypothesis_test(data1,data2)
   end
 
-  def mean_hypothesis_test(data1,data2)
-    df     = (n1 = data1.size) + (n2 = data2.size) - 1
-    mean1  = data1.mean
-    mean2  = data2.mean
-    var1   = (data1.standard_deviation_sample) ** 2
-    var2   = (data2.standard_deviation_sample) ** 2
+  def mean_hypothesis_test(hash)
+    n1     = hash['nu1'] + 1
+    n2     = hash['nu2'] + 1
+    df     = n1 + n2 - 2
+    mean1  = hash['mean1']
+    mean2  = hash['mean2']
+    var1   = hash['var1']
+    var2   = hash['var2']
     t_star = (mean1 - mean2).quo(Math.sqrt(var1 / n1 + var2 / n2))
     t_critical = TestStatisticHelper::initialize_with(:distribution=>:t,
                                                       :p=>0.025,
