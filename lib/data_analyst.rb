@@ -11,6 +11,12 @@ class DataAnalyst
     @data1 = if data1.class == Vector then data1; else data1.to_scale; end
     @data2 = if data2.class == Vector then data2; else data2.to_scale; end
   end
+
+  def process
+    @hash = { 'nu1' => @data1.size - 1, 'mean1' => @data1.mean.round(4), 'var1' => @data1.variance_sample.round(4),
+              'nu2' => @data2.size - 1, 'mean2' => @data2.mean.round(4), 'var2' => @data2.variance_sample.round(4)
+            }
+  end
 end
 
 #   def set_variables(array)
