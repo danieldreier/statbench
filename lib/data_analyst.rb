@@ -7,9 +7,14 @@ class DataAnalyst
   include HypothesisTest
   include ConfidenceInterval
 
+  attr_reader :data1
+  attr_reader :data2
+  attr_reader :hash
+
   def initialize(data1,data2)
     @data1 = if data1.class == Vector then data1; else data1.to_scale; end
     @data2 = if data2.class == Vector then data2; else data2.to_scale; end
+    process
   end
 
   def process
