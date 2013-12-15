@@ -10,8 +10,8 @@ module HypothesisTest
     true unless mean_hypothesis_test(hash)
   end
 
-  def equal_variability?(data1=@data1,data2=@data2)
-    true unless variance_hypothesis_test(data1,data2)
+  def equal_variability?(hash=@hash)
+    true unless variance_hypothesis_test(hash)
   end
 
   def mean_hypothesis_test(hash)
@@ -29,11 +29,11 @@ module HypothesisTest
     true if t_star.abs >= t_critical.abs
   end
 
-  def variance_hypothesis_test(data1,data2)
-    df1 = data1.size - 1
-    df2 = data2.size - 1
-    var1 = (data1.standard_deviation_sample) ** 2
-    var2 = (data2.standard_deviation_sample) ** 2
+  def variance_hypothesis_test(hash)
+    df1 = hash['nu1']
+    df2 = hash['nu2']
+    var1 = hash['var1']
+    var2 = hash['var2']
     alpha = 0.05
     f_star = var1.quo(var2)
     f_critical_1 = TestStatisticHelper::initialize_with(:distribution        =>:f,
