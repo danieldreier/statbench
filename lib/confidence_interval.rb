@@ -7,6 +7,17 @@ module ConfidenceInterval
   
   # The get_variables method is also present in HypothesisTest.
   # When we refactor we will want to extract these to DRY it up.
+  def process_args(hash,confidence_level=nil)
+    if hash.class == Float 
+      @alpha = 1 - hash
+      @hash = self.hash
+    else
+      @hash = hash
+      @alpha = if confidence_level then 1 - confidence_level; else 0.05; end
+    end
+    get_variables(hash)
+  end
+
   def get_variables(hash)
     @alpha = 0.05
     hash.each do |key,value|
@@ -21,8 +32,8 @@ module ConfidenceInterval
      (point_estimate + statistic.abs * std_error).round(5) ]
   end
 
-  def mean_difference(hash=@hash)
-    get_variables(hash)
+  def mean_difference(hash=@hash,confidence=0.95)
+    process_args(hash)
     t = TestStatisticHelper::initialize_with(:distribution       => :t,
                                              :alpha              => @alpha / 2,
                                              :degrees_of_freedom => @nu1 + @nu2)
@@ -33,8 +44,8 @@ module ConfidenceInterval
     Math.sqrt((@var1 + @var2).quo(@nu1 + @nu2 + 2))
   end
 
-  def sdev_difference(hash=@hash)
-    get_variables(hash)
+  def sdev_difference(hash=@hash,confidence=0.95)
+    process_args(hash)
     f1 = TestStatisticHelper::initialize_with(:distribution         => :f, 
                                               :degrees_of_freedom_1 => @nu1,
                                               :degrees_of_freedom_2 => @nu2,
