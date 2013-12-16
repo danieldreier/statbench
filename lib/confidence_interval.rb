@@ -17,15 +17,21 @@ module ConfidenceInterval
   def mean_difference(hash=@hash)
     get_variables(hash)
     @alpha    = 0.05
-    nu        = @nu1 + @nu2
-    mse       = (@var1 + @var2).quo(2)
-    std_error = Math.sqrt((2 * mse) / (nu + 2))
     t         = TestStatisticHelper::initialize_with(:distribution       => :t,
                                                      :alpha              => @alpha / 2,
-                                                     :degrees_of_freedom => nu)
-    lower = ((sample_diff = @mean1 - @mean2) - (margin = t.abs * std_error)).round(5)
+                                                     :degrees_of_freedom => @nu1 + @nu2)
+    lower = ((sample_diff = @mean1 - @mean2) - (margin = t.abs * standard_error(:mean))).round(5)
     upper = (sample_diff +  margin).round(5)
     { :interval => [lower,upper], :confidence => 1 - @alpha }
+  end
+
+  def standard_error(parameter)
+    case parameter
+    when :mean
+      Math.sqrt((@var1 + @var2).quo(@nu1 + @nu2 + 2))
+    when :variance
+      p "pending"
+    end
   end
 
   def sdev_difference(hash=@hash)
