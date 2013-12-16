@@ -5,19 +5,23 @@ module ConfidenceInterval
   include Statsample
   include TestStatisticHelper
   
-  # The get_variables method is also present in HypothesisTest.
+  # The #process_args method is also present in HypothesisTest.
   # When we refactor we will want to extract these to DRY it up.
   def process_args(hash,confidence_level=nil)
-    if hash.class == Float 
+    if hash.instance_of? Float 
       @alpha = 1 - hash
       @hash = self.hash
-    else
+    elsif hash.instance_of? Hash
       @hash = hash
       @alpha = if confidence_level then 1 - confidence_level; else 0.05; end
+    else
+      raise(ArgumentError,'Invalid arguments')
     end
-    get_variables(hash)
+    get_variables(@hash)
   end
 
+  # The #get_variables method is also present in HypothesisTest.
+  # When we refactor we will want to extract these to DRY it up.
   def get_variables(hash)
     @alpha = 0.05
     hash.each do |key,value|
