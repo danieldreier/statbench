@@ -20,7 +20,10 @@ describe HypothesisTest do
         expect(processor.equal_response_time?(0.05)).to be_false
       end
 
-      it 'uses the 0.05 significance level by default'
+      it 'uses the 0.05 significance level by default' do 
+        processor = DataAnalyst.new(DATASET_4,DATASET_5)
+        expect(processor.equal_response_time?(0.05)).to eql(processor.equal_response_time?)
+      end
     end # '#equal_response_time?'
 
     describe '#equal_variability?' do 
