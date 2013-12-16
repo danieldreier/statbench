@@ -10,9 +10,8 @@ describe ConfidenceInterval do
 
   describe 'variability intervals' do 
     it 'gives interval estimate of difference between two standard deviations' do 
-      pending('constructing the interval')
       processor = DataAnalyst.new(DATASET_1,DATASET_2)
-      expect(processor.sdev_difference).to eql()
+      expect(processor.sdev_difference).to eql({ :interval => [0.81951, 1.0829], :confidence => 0.95 })
     end
   end # 'variability intervals'
 end # describe ConfidenceInterval
