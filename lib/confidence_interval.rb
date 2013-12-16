@@ -23,9 +23,9 @@ module ConfidenceInterval
 
   def mean_difference(hash=@hash)
     get_variables(hash)
-    t         = TestStatisticHelper::initialize_with(:distribution       => :t,
-                                                     :alpha              => @alpha / 2,
-                                                     :degrees_of_freedom => @nu1 + @nu2)
+    t = TestStatisticHelper::initialize_with(:distribution       => :t,
+                                             :alpha              => @alpha / 2,
+                                             :degrees_of_freedom => @nu1 + @nu2)
     { :interval => interval(t,@mean1 - @mean2,:mean), :confidence => 1 - @alpha }
   end
 
@@ -40,6 +40,18 @@ module ConfidenceInterval
 
   def sdev_difference(hash=@hash)
     get_variables(hash)
-    (@sdev1 ||= Math.sqrt(@var1)) - (@sdev2 ||= Math.sqrt(@var2))
+    f1 = TestStatisticHelper::initialize_with(:distribution         => :f, 
+                                              :degrees_of_freedom_1 => @nu1,
+                                              :degrees_of_freedom_2 => @nu2,
+                                              :tail                 => 'right',
+                                              :alpha                => @alpha / 2 )
+    f2 = TestStatisticHelper::initialize_with(:distribution         => :f, 
+                                              :degrees_of_freedom_1 => @nu1,
+                                              :degrees_of_freedom_2 => @nu2,
+                                              :tail                 => 'left',
+                                              :alpha                => @alpha / 2)
+    point_estimate = @var1 / @var2
+    interval = [ Math.sqrt(point_estimate / f1).round(5), Math.sqrt(point_estimate / f2).round(5) ]
+    { :interval => interval, :confidence => 1 - @alpha }
   end
 end
