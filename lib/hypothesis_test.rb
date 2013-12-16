@@ -11,8 +11,9 @@ module HypothesisTest
     true unless mean_hypothesis_test(@hash)
   end
 
-  def equal_variability?(hash=@hash)
-    true unless variance_hypothesis_test(hash)
+  def equal_variability?(hash=@hash,significance=0.05)
+    process_args(hash,significance)
+    true unless variance_hypothesis_test(@hash)
   end
 
   def get_variables(hash)
@@ -46,15 +47,14 @@ module HypothesisTest
 
   def variance_hypothesis_test(hash)
     get_variables(hash)
-    alpha = 0.05
     f_star = @var1.quo(@var2)
     f_critical_1 = TestStatisticHelper::initialize_with(:distribution        =>:f,
-                                                        :p                   =>alpha / 2,
+                                                        :p                   =>@alpha / 2,
                                                         :tail                =>'right',
                                                         :degrees_of_freedom_1=>@nu1,
                                                         :degrees_of_freedom_2=>@nu2)
     f_critical_2 = TestStatisticHelper::initialize_with(:distribution        =>:f,
-                                                        :p                   =>alpha / 2,
+                                                        :p                   =>@alpha / 2,
                                                         :tail                =>'left',
                                                         :degrees_of_freedom_1=>@nu1,
                                                         :degrees_of_freedom_2=>@nu2)
