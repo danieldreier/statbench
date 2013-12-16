@@ -14,7 +14,11 @@ describe HypothesisTest do
         expect(processor.equal_response_time?).to be_true
       end
 
-      it 'allows user to choose a significance level'
+      it 'allows user to choose a significance level' do 
+        processor = DataAnalyst.new(DATASET_4,DATASET_5)
+        expect(processor.equal_response_time?(0.001)).to be_true
+        expect(processor.equal_response_time?(0.05)).to be_false
+      end
 
       it 'uses the 0.05 significance level by default'
     end # '#equal_response_time?'
