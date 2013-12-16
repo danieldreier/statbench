@@ -33,6 +33,10 @@ module HypothesisTest
     true if t_star.abs >= t_critical.abs
   end
 
+  def mean_test_results(hash=@hash,significance=0.05)
+    { :equal_mean? => equal_response_time?(hash,significance), :significance => @alpha }
+  end
+
   def process_args(hash,significance)
     if hash.instance_of? Float 
       @alpha = hash

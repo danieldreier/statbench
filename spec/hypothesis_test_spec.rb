@@ -2,6 +2,21 @@ require_relative 'spec_helper'
 
 describe HypothesisTest do 
   include HypothesisTest
+  describe 'test results' do 
+    describe '#mean_test_results' do 
+      it 'gives significance level and outcome' do 
+        processor = DataAnalyst.new(DATASET_1,DATASET_2)
+        expect(processor.mean_test_results).to eql({ :equal_mean? => true, :significance => 0.05})
+      end
+    end
+
+    describe '#variance_test_results' do 
+      it 'gives significance level and outcome' do 
+        pending('implementation')
+      end
+    end
+  end # 'test results'
+
   describe 'testing two means' do 
     describe '#equal_response_time?' do 
       it 'returns false when response times unequal' do 
