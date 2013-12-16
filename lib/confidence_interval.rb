@@ -23,7 +23,6 @@ module ConfidenceInterval
   # The #get_variables method is also present in HypothesisTest.
   # When we refactor we will want to extract these to DRY it up.
   def get_variables(hash)
-    @alpha = 0.05
     hash.each do |key,value|
       name = '@' + key
       instance_variable_set(name,value)
@@ -49,7 +48,7 @@ module ConfidenceInterval
   end
 
   def sdev_difference(hash=@hash,confidence=0.95)
-    process_args(hash)
+    process_args(hash,confidence)
     f1 = TestStatisticHelper::initialize_with(:distribution         => :f, 
                                               :degrees_of_freedom_1 => @nu1,
                                               :degrees_of_freedom_2 => @nu2,
