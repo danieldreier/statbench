@@ -12,7 +12,8 @@ describe HypothesisTest do
 
     describe '#variance_test_results' do 
       it 'gives significance level and outcome' do 
-        pending('implementation')
+        processor = DataAnalyst.new(DATASET_1,DATASET_2)
+        expect(processor.variance_test_results).to eql({ :equal_variance? => true, :significance => 0.05 })
       end
     end
   end # 'test results'

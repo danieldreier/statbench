@@ -64,6 +64,10 @@ module HypothesisTest
                                                         :degrees_of_freedom_2=>@nu2)
     true if f_star > f_critical_1 || f_star < f_critical_2
   end
+
+  def variance_test_results(hash=@hash,significance=0.05)
+    { :equal_variance? => equal_variability?(hash,significance), :significance => @alpha }
+  end
 end
 
 include HypothesisTest # I have no idea why this is required for it not to throw errors
