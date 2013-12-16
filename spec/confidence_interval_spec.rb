@@ -5,7 +5,7 @@ describe ConfidenceInterval do
     it 'gives interval estimate of difference between two means' do 
       processor = DataAnalyst.new(DATASET_1,DATASET_2)
       expect(processor.mean_difference).to 
-        eql({ :interval => [-2.63081, 1.41151], :confidence => 0.95})
+        eql({ :interval => [-3,00521, 1.78591], :confidence => 0.95})
     end
   end # 'mean intervals'
 
