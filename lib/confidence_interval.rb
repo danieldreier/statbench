@@ -15,8 +15,8 @@ module ConfidenceInterval
     end
   end
 
-  def interval(statistic,point_estimate,parameter)
-    std_error = standard_error(parameter)
+  def mean_interval(statistic,point_estimate)
+    std_error = standard_error
     [(point_estimate - statistic.abs*std_error).round(5), 
      (point_estimate + statistic.abs * std_error).round(5) ]
   end
@@ -26,16 +26,11 @@ module ConfidenceInterval
     t = TestStatisticHelper::initialize_with(:distribution       => :t,
                                              :alpha              => @alpha / 2,
                                              :degrees_of_freedom => @nu1 + @nu2)
-    { :interval => interval(t,@mean1 - @mean2,:mean), :confidence => 1 - @alpha }
+    { :interval => mean_interval(t,@mean1 - @mean2), :confidence => 1 - @alpha }
   end
 
-  def standard_error(parameter)
-    case parameter
-    when :mean
-      Math.sqrt((@var1 + @var2).quo(@nu1 + @nu2 + 2))
-    when :variance
-      p "pending"
-    end
+  def standard_error
+    Math.sqrt((@var1 + @var2).quo(@nu1 + @nu2 + 2))
   end
 
   def sdev_difference(hash=@hash)
