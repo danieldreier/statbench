@@ -2,16 +2,17 @@ require_relative 'spec_helper'
 
 describe ConfidenceInterval do 
   describe 'mean intervals' do 
-    it 'estimates a difference between two means' do 
+    it 'gives interval estimate of difference between two means' do 
       processor = DataAnalyst.new(DATASET_1,DATASET_2)
-      expect(processor.mean_difference).to be_within(0.005).of(-0.6096)
+      expect(processor.mean_difference).to 
+        eql({ :interval => [-2.63081, 1.41151], :confidence => 0.95})
     end
   end # 'mean intervals'
 
   describe 'variability intervals' do 
-    it 'estimates a difference between two standard deviations' do 
+    it 'gives interval estimate of difference between two standard deviations' do 
       processor = DataAnalyst.new(DATASET_1,DATASET_2)
-      expect(processor.sdev_difference).to be_within(0.005).of(-1.0287)
+      expect(processor.sdev_difference).to eql()
     end
   end # 'variability intervals'
-end
+end # describe ConfidenceInterval
