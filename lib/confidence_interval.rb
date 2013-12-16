@@ -1,6 +1,13 @@
 require 'statsample'
 require_relative 'test_statistic'
 
+# The mean confidence interval gives an interval estimate of 
+# the difference in response times between two configurations. The confidence level indicates the percent
+# probability that the real difference is in the interval. (You can never be 100% sure.) For example, if 
+# you have an interval of (-1.33, 3.74) with confidence level 0.95, that means we're 95% sure the new 
+# server configuration is not more than 1.33 seconds SLOWER than the old one, and also not more than 3.74
+# seconds faster.
+
 module ConfidenceInterval
   include Statsample
   include TestStatisticHelper
