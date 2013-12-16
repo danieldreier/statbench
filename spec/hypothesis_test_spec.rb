@@ -25,7 +25,9 @@ describe HypothesisTest do
         expect(processor.equal_response_time?(0.05)).to eql(processor.equal_response_time?)
       end
     end # '#equal_response_time?'
+  end # 'testing two means'
 
+  describe 'testing two variances' do 
     describe '#equal_variability?' do 
       it 'returns false when variability is unequal' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_3)
@@ -48,5 +50,5 @@ describe HypothesisTest do
         expect(processor.equal_variability?(0.05)).to eql(processor.equal_variability?)
       end
     end # '#equal_variability?'
-  end # 'testing two means'
+  end # 'testing two variances'
 end # 'describe HypothesisTest'
