@@ -13,6 +13,10 @@ describe HypothesisTest do
         processor = DataAnalyst.new(DATASET_1,DATASET_1)
         expect(processor.equal_response_time?).to be_true
       end
+
+      it 'allows user to choose a significance level'
+
+      it 'uses the 0.05 significance level by default'
     end # '#equal_response_time?'
 
     describe '#equal_variability?' do 
@@ -25,6 +29,10 @@ describe HypothesisTest do
         processor = DataAnalyst.new(DATASET_1,DATASET_1) 
         expect(processor.equal_variability?).to be_true
       end
+
+      it 'allows user to choose significance level'
+
+      it 'uses the 0.05 significance level by default'
     end # '#equal_variability?'
   end # 'testing two means'
 end # 'describe HypothesisTest'
