@@ -17,7 +17,6 @@ module HypothesisTest
   end
 
   def get_variables(hash)
-    @alpha ||= 0.05
     hash.each do |key,value|
       name = '@' + key
       instance_variable_set(name,value)
