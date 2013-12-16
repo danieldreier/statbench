@@ -43,7 +43,10 @@ describe HypothesisTest do
         expect(processor.equal_variability?(0.3)).to be_false
       end
 
-      it 'uses the 0.05 significance level by default'
+      it 'uses the 0.05 significance level by default' do 
+        processor = DataAnalyst.new(DATASET_4,DATASET_5)
+        expect(processor.equal_variability?(0.05)).to eql(processor.equal_variability?)
+      end
     end # '#equal_variability?'
   end # 'testing two means'
 end # 'describe HypothesisTest'
