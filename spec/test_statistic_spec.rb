@@ -24,11 +24,11 @@ class TestStatistic
         expect(z1).to be_within(1e-10).of(z3)
       end
 
-      it 'can use absolute value method without reverting to plain old float' do 
+      it 'can return absolute value without turning into a float' do 
         z = TestStatisticHelper::initialize_with({ :distribution => :z,
-                                                    :p            => 0.025 })
-        absolute_value = z.abs 
-        expect(absolute_value).to be_instance_of(TestStatistic)
+                                                    :p           => 0.025 })
+        absolute_value = z.abs
+        expect(z).to be_instance_of(TestStatistic)
       end
     end
 
