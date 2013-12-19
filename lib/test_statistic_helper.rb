@@ -3,7 +3,7 @@ require 'statistics2'
 
 module TestStatisticHelper
   include Distribution
- include Statistics2
+  include Statistics2
 
   ## Initialization methods 
 
