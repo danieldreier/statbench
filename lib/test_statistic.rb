@@ -38,17 +38,15 @@ class TestStatistic < DelegateClass(Float)
     @distribution = @attributes[:distribution]
 
     # These attributes are valid only for some distributions
-    if @distribution == :t || @distribution == :chi2
+    if @distribution == :t
       @nu = @attributes[:degrees_of_freedom]
     else
       @attributes.delete(:degrees_of_freedom) if @attributes.has_key?(:degrees_of_freedom)
+      @attributes.delete(:nu) if @attributes.has_key?(:nu)
     end
 
-    if @distribution == :chi2 || @distribution == :f
-      @tail = @attributes[:tail]
-    else
-      @attributes.delete(:tail) if @attributes.has_key?(:tail)
-    end
+    if @distribution == :f then @tail = @attributes[:tail]
+    else @attributes.delete(:tail) if @attributes.has_key?(:tail); end
 
     if @distribution == :f
       @nu1 = @attributes[:degrees_of_freedom_1]
