@@ -126,7 +126,7 @@ class TestStatistic
             t = TestStatisticHelper::initialize_with({ :distribution       => :t,
                                                        :alpha              => 0.05,
                                                        :degrees_of_freedom => 18 })
-            expect(t).to be_within(ACCEPTABLE_ERROR).of(1.734)
+            expect(t).to be_within(ACCEPTABLE_ERROR).of(-1.734)
           end
         end
 
