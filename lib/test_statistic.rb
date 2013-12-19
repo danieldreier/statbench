@@ -1,4 +1,3 @@
-require 'statsample'
 require 'distribution'
 require 'delegate'
 require_relative 'test_statistic_helper.rb'
@@ -26,7 +25,7 @@ class TestStatistic < DelegateClass(Float)
   end
 
   def abs
-    self.value.abs
+    @value.abs
   end
 
   def add_attributes(hash)
