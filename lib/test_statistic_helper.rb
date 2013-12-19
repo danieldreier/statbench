@@ -103,7 +103,7 @@ module TestStatisticHelper
       else 1 - Distribution::Normal.cdf(z)
       end
     else
-      p = hash[:p] || hash[:alpha]
+      p = hash[:p] || hash[:alpha] || hash[:significance_level]
       output = TestStatistic.new(Distribution::Normal.p_value(p))
     end
     output.add_attributes(hash)
