@@ -25,6 +25,10 @@ class TestStatistic < DelegateClass(Float)
     @value = __setobj__(value)
   end
 
+  def abs
+    self.value.abs
+  end
+
   def add_attributes(hash)
     @attributes = hash
 
