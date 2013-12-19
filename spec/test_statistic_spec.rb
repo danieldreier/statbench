@@ -14,11 +14,14 @@ class TestStatistic
       end
 
       it 'can be initialized with :p, :alpha, or :significance_level as probability of Type I error' do 
-        z1 = TestStatisticHelper::initialize_with({ :distribution => :z,
-                                                    :p            => 0.025 })
-        z2 = TestStatisticHelper::initialize_with({ :distribution => :z,
-                                                    :alpha        => 0.025 })
-        z1.should eql(z2)
+        z1 = TestStatisticHelper::initialize_with({ :distribution       => :z,
+                                                    :p                  => 0.025 })
+        z2 = TestStatisticHelper::initialize_with({ :distribution       => :z,
+                                                    :alpha              => 0.025 })
+        z3 = TestStatisticHelper::initialize_with({ :distribution       => :z,
+                                                    :significance_level => 0.025})
+        expect(z1).to be_within(1e-10).of(z2)
+        expect(z1).to be_within(1e-10).of(z3)
       end
 
       it 'can use absolute value method without reverting to plain old float' do 
