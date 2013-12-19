@@ -67,12 +67,12 @@ module TestStatisticHelper
         hash[:p] = if t <= 0 then Distribution::T.cdf(t,hash[:degrees_of_freedom])
         else 1 - Distribution::T.cdf(t,hash[:degrees_of_freedom]); end     
 
-      elsif hash[:p] || hash[:alpha]
+      elsif hash[:p] || hash[:alpha] || hash[:significance_level]
         # Calculate the degrees of freedom based on the values of p and t
         # This one still needs work 
       end
     else
-      p = hash[:p] || hash[:alpha]
+      p = hash[:p] || hash[:alpha] || hash[:significance_level]
       nu = hash[:degrees_of_freedom] 
       output = TestStatistic.new(Distribution::T.p_value(p,nu))
     end
