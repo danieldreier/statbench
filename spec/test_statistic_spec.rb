@@ -72,7 +72,7 @@ class TestStatistic
                                                       :tail               => 'right',
                                                       :degrees_of_freedom => 16,
                                                       :p                  => 0.05 })
-        chi2.tail.should equal('right')
+        chi2.tail.should eql('right')
       end
     end
 
