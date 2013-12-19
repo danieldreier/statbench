@@ -30,12 +30,8 @@ class TestStatistic < DelegateClass(Float)
 
     # These attributes are valid for all distributions
     @attributes[:value] ||= @value
-    @p = @attributes[:p] ||= if @attributes[:alpha] 
-      @attributes.delete(:alpha) 
-    elsif @attributes[:significance_level] # Standardize nomenclature
-      @attributes.delete[:significance_level]
-    end
-    @p = @attributes[:p]
+    @p = @attributes[:p] ||= if @attributes[:alpha] then @attributes.delete(:alpha)
+      elsif @attributes[:significance_level] then @attributes.delete(:significance_level); end
     @distribution = @attributes[:distribution]
 
     # These attributes are valid only for some distributions
