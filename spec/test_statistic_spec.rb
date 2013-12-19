@@ -36,7 +36,7 @@ class TestStatistic
       it 'gives a hash of its own attributes' do 
         z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                    :alpha        => 0.025 })
-        z.attributes.should be_instance_of(Hash)
+        expect(z.attributes).to be_instance_of(Hash)
       end
 
       it 'only displays attributes relevant to its distribution' do 
@@ -44,27 +44,28 @@ class TestStatistic
                                                    :degrees_of_freedom => 20,
                                                    :alpha              => 0.05,
                                                    :tail               => 'right' })
-        t.attributes.should_not have_key(:tail)
+        expect(t.attributes).not_to have_key(:tail)
       end
 
       it 'returns its distribution' do 
         z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                    :alpha        => 0.05 })
-        z.distribution.should be(:z)
+        expect(z.distribution).to be(:z)
       end
 
       it 'returns its degrees of freedom' do 
         t = TestStatisticHelper::initialize_with({ :distribution       => :t,
                                                    :degrees_of_freedom => 25,
                                                    :alpha              => 0.025 })
-        t.degrees_of_freedom.should be(25)
+        expect(t.degrees_of_freedom).to eql(25)
       end
 
       it 'responds to queries for #p, #alpha, or #p_value' do 
         z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                    :p            => 0.05 })
-        z.p.should equal(z.alpha)
-        z.p.should equal(z.p_value)
+        expect(z.p).to eql(z.alpha)
+        expect(z.p).to eql(z.p_value)
+        expect(z.p).to eql(z.significance_level)
       end
 
       it 'returns its tail' do 
@@ -72,7 +73,7 @@ class TestStatistic
                                                       :tail               => 'right',
                                                       :degrees_of_freedom => 16,
                                                       :p                  => 0.05 })
-        chi2.tail.should eql('right')
+        expect(chi2.tail).to eql('right')
       end
     end
 
@@ -82,7 +83,7 @@ class TestStatistic
           it 'instantiates with the correct z-value' do 
             z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                        :alpha        => 0.025 })
-            z.abs.should be_within(ACCEPTABLE_ERROR).of(1.96)
+            expect(z.abs).to be_within(ACCEPTABLE_ERROR).of(1.96)
           end
         end
 
@@ -90,21 +91,21 @@ class TestStatistic
           it 'instantiates with the correct alpha given value' do 
             z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                        :value        => 1.96 })
-            z.alpha.should be_within(ACCEPTABLE_ERROR).of(0.025)
+            expect(z.alpha).to be_within(ACCEPTABLE_ERROR).of(0.025)
           end
 
           it 'instantiates with z-distribution given alpha and value' do 
             pending "additional Distribution functionality"
             z = TestStatisticHelper::initialize_with({ :value => 1.96,
                                                        :alpha => 0.025 })
-            z.distribution.should_be(:z)
+            expect(z.distribution).to be(:z)
           end
 
           it 'instantiates with alpha given distribution and value' do 
             pending "additional Distribution functionality"
             z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                        :value        => 1.96 })
-            z.alpha.should be_within(ACCEPTABLE_ERROR).of(0.025)
+            expect(z.alpha).to be_within(ACCEPTABLE_ERROR).of(0.025)
           end
         end
       end
@@ -113,7 +114,7 @@ class TestStatistic
         it 'returns nil when queried for degrees of freedom' do 
           z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                      :alpha        => 0.025 })
-          z.degrees_of_freedom.should_be(nil)
+          expect(z.degrees_of_freedom).to be(nil)
         end
       end
     end
@@ -125,7 +126,7 @@ class TestStatistic
             t = TestStatisticHelper::initialize_with({ :distribution       => :t,
                                                        :alpha              => 0.05,
                                                        :degrees_of_freedom => 18 })
-            t.should be_within(ACCEPTABLE_ERROR).of(1.734)
+            expect(t).to be_within(ACCEPTABLE_ERROR).of(1.734)
           end
         end
 
@@ -134,21 +135,21 @@ class TestStatistic
             t = TestStatisticHelper::initialize_with({ :distribution       => :t,
                                                        :degrees_of_freedom => 8,
                                                        :value              => 1.8595 })
-            t.alpha.should be_within(ACCEPTABLE_ERROR).of(0.05)
+            expect(t.alpha).to be_within(ACCEPTABLE_ERROR).of(0.05)
           end
 
           it 'instantiates with correct nu' do 
             t = TestStatisticHelper::initialize_with({ :distribution => :t,
                                                        :alpha        => 0.05,
                                                        :value        => -1.8595 })
-            t.nu.should == 8
+            expect(t.nu).to eql(8)
           end
 
           it 'instantiates with correct distribution' do 
             t = TestStatisticHelper::initialize_with({ :degrees_of_freedom => 19,
                                                        :value              => 2.093,
                                                        :p                  => 0.025 })
-            t.distribution.should == :t 
+            expect(t.distribution).to be(:t)
           end
         end
       end
@@ -162,7 +163,7 @@ class TestStatistic
                                                           :tail               => 'right',
                                                           :degrees_of_freedom => 16,
                                                           :alpha              => 0.05 })
-            chi2.should be_within(ACCEPTABLE_ERROR).of(26.296)
+            expect(chi2).to be_within(ACCEPTABLE_ERROR).of(26.296)
           end
         end
 
@@ -172,7 +173,7 @@ class TestStatistic
                                                           :tail         => 'left',
                                                           :value        => 17.708,
                                                           :p            => 0.05 })
-            chi2.degrees_of_freedom.should == 29
+            expect(chi2.degrees_of_freedom).to eql(29)
           end
 
           it 'instantiates with correct alpha' do 
@@ -180,7 +181,7 @@ class TestStatistic
                                                           :distribution       => :chi2,
                                                           :tail               => 'right',
                                                           :value              => 15.5073 })
-            chi2.alpha.should be_within(ACCEPTABLE_ERROR).of(0.05)
+            expect(chi2.alpha).to be_within(ACCEPTABLE_ERROR).of(0.05)
           end
         end
       end
@@ -191,7 +192,7 @@ class TestStatistic
                                                         :distribution       => :chi2,
                                                         :tail               => 'left',
                                                         :p                  => 0.05 })
-          chi2.tail.should be('left')
+          expect(chi2.tail).to be('left')
         end
       end
     end
@@ -205,7 +206,7 @@ class TestStatistic
                                                        :distribution         => :f,
                                                        :tail                 => 'right',
                                                        :p                    => 0.05 })
-            f.should be_within(ACCEPTABLE_ERROR).of(2.091)
+            expect(f).to be_within(ACCEPTABLE_ERROR).of(2.091)
           end
         end
 
@@ -235,8 +236,8 @@ class TestStatistic
                                                      :distribution         => :f,
                                                      :tail                 => 'right',
                                                      :p                    => 0.05 })
-          f.nu1.should equal(8)
-          f.nu2.should equal(24)
+          expect(f.nu1).to equal(8)
+          expect(f.nu2).to equal(24)
         end
 
         it 'returns both sets of degrees of freedom when queried' do 
@@ -246,7 +247,7 @@ class TestStatistic
                                                      :distribution         => :f,
                                                      :tail                 => 'right',
                                                      :p                    => 0.05 })
-          f.nu.should equal( [8, 24])
+          expect(f.nu).to eql( [8, 24])
         end
       end
     end
