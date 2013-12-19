@@ -28,7 +28,7 @@ class TestStatistic
         z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                     :p            => 0.025 })
         absolute_value = z.abs 
-        absolute_value.should be_instance_of(TestStatistic)
+        expect(absolute_value).to be_instance_of(TestStatistic)
       end
     end
 
