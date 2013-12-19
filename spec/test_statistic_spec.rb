@@ -139,6 +139,7 @@ class TestStatistic
           end
 
           it 'instantiates with correct nu' do 
+            pending
             t = TestStatisticHelper::initialize_with({ :distribution => :t,
                                                        :alpha        => 0.05,
                                                        :value        => -1.8595 })
