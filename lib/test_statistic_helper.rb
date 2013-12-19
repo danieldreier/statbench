@@ -7,28 +7,6 @@ module TestStatisticHelper
 
   ## Initialization methods 
 
-  def initialize_chi2(hash)
-    if hash[:value]
-      output = TestStatistic.new(hash[:value])
-
-    else
-      p = hash[:p] || hash[:alpha]
-      nu = hash[:degrees_of_freedom]
-      tail = hash[:tail]
-
-      if tail == 'right'
-        output = TestStatistic.new(Distribution::ChiSquare.p_value(1-p,nu))
-      elsif tail == 'left'
-        output = TestStatistic.new(Distribution::ChiSquare.p_value(p,nu))
-      else
-        raise('Please specify a tail or instantiate two TestStatistics for two-tailed test.')
-      end
-
-    end
-    output.add_attributes(hash)
-    output
-  end
-
   def initialize_f(hash)
     nu1  = hash[:degrees_of_freedom_1]
     nu2  = hash[:degrees_of_freedom_2]
@@ -83,37 +61,16 @@ module TestStatisticHelper
 
   def initialize_with(hash)
     case hash[:distribution]
-    when :z then initialize_z(hash)
     when :t then initialize_t(hash)
-    when :chi2 then initialize_chi2(hash)
     when :f then initialize_f(hash)
-    else raise(ArgumentError,'Error: Need to specify distribution')
+    else raise(ArgumentError,'Only t and F distributions currently supported')
     end
-  end
-
-  def initialize_z(hash)
-    if hash[:value]
-      output = TestStatistic.new(z = hash[:value])
-
-      # The p-value is set to be the area IN THE TAIL for both left- and 
-      # right-tailed tests. When z > 0, this value is NOT the same as the 
-      # value of the cumulative distribution function at z.
-
-      hash[:p] = if z <= 0 then Distribution::Normal.cdf(z)
-      else 1 - Distribution::Normal.cdf(z)
-      end
-    else
-      p = hash[:p] || hash[:alpha] || hash[:significance_level]
-      output = TestStatistic.new(Distribution::Normal.p_value(p))
-    end
-    output.add_attributes(hash)
-    output
   end
 
   ## Modification Methods
 
   def edit_attribute(statistic,attribute,new_attribute_value)
-    raise(ArgumentError,"Error: Value must be instance of TestStatistic class") unless statistic.is_a?(TestStatistic)
+    raise(ArgumentError,"Error: Value must be instance of TestStatistic class") unless statistic.instance_of?(TestStatistic)
     attribute_hash = statistic.attributes
     attribute_hash.delete(:value)
     action = lambda { |key,var| attribute_hash[key] = var = new_attribute_value }
@@ -123,39 +80,27 @@ module TestStatisticHelper
     when attribute == 'value'
       action.yield(:value,'value')
 
-    when attribute == 'alpha' || attribute == 'p'
+    when attribute == 'alpha' || attribute == 'p' || attribute == 'significance_level'
       action.yield(:p,'p')
 
     when attribute == 'degrees_of_freedom' || attribute == 'nu'
-      if attribute_hash[:distribution] == :z || attribute_hash[:distribution] == :f
-        raise(error_message)
-      else 
-        if attribute_hash.has_key?(:nu) then action.yield(:nu,'nu')
-        else action.yield(:degrees_of_freedom,'nu'); end
-      end
+      raise(error_message) unless attribute_hash[:distribution] == :t
+      if attribute_hash.has_key?(:nu) then action.yield(:nu,'nu')
+      else action.yield(:degrees_of_freedom,'nu'); end
 
     when attribute == 'tail'
-      unless attribute_hash[:distribution] == :chi2 || attribute_hash[:distribution] == :f
-        raise(error_message)
-      else
-        action.yield(:tail,'tail')
-      end
+      raise(error_message) unless attribute_hash[:distribution] == :f
+      action.yield(:tail,'tail')
 
     when attribute == 'degrees_of_freedom_1' || attribute == 'nu1'
-      unless attribute_hash[:distribution] == :f
-        raise(error_message)
-      else
-        if attribute_hash.has_key?(:nu1) then action.yield(:nu1,'nu1')
-        else action.yield(:degrees_of_freedom_1,'nu1'); end
-      end
+      raise(error_message) unless attribute_hash[:distribution] == :f
+      if attribute_hash.has_key?(:nu1) then action.yield(:nu1,'nu1')
+      else action.yield(:degrees_of_freedom_1,'nu1'); end
 
     when attribute == 'degrees_of_freedom_2' || attribute == 'nu2'
-      unless attribute_hash[:distribution] == :f
-        raise(error_message)
-      else
-        if attribute_hash.has_key?(:nu2) then action.yield(:nu2,'nu2')
-        else action.yield(:degrees_of_freedom_2,'nu2'); end
-      end
+      raise(error_message) unless attribute_hash[:distribution] == :f
+      if attribute_hash.has_key?(:nu2) then action.yield(:nu2,'nu2')
+      else action.yield(:degrees_of_freedom_2,'nu2'); end
 
     when attribute == 'distribution'   
       action.yield(:distribution,'distribution')
