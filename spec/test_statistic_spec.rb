@@ -90,7 +90,7 @@ class TestStatistic
           it 'instantiates with the correct alpha given value' do 
             z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                        :value        => 1.96 })
-            z.alpha.should be_within(ACCEPTABLE_ERROR).of(1.96)
+            z.alpha.should be_within(ACCEPTABLE_ERROR).of(0.025)
           end
 
           it 'instantiates with z-distribution given alpha and value' do 
