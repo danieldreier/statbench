@@ -10,7 +10,7 @@ class TestStatistic
       it 'can be used in calculations like a float' do 
         z = TestStatisticHelper::initialize_with({ :distribution => :z,
                                                    :p            => 0.025 })
-        (z * 1.5).should be_instance_of(Numeric)
+        expect(z * 1.5).to be_instance_of(Float)
       end
 
       it 'can be initialized with :p, :alpha, or :significance_level as probability of Type I error' do 
