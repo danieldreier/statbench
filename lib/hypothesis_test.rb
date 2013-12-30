@@ -8,12 +8,12 @@ module HypothesisTest
 
   def equal_response_time?(hash=@hash,significance=0.05)
     process_args(hash,significance)
-    true unless mean_hypothesis_test(@hash)
+    true unless mean_hypothesis_test(hash,significance)
   end
 
   def equal_variability?(hash=@hash,significance=0.05)
     process_args(hash,significance)
-    true unless variance_hypothesis_test(@hash)
+    true unless variance_hypothesis_test(hash,significance)
   end
 
   def get_variables(hash)
@@ -23,17 +23,17 @@ module HypothesisTest
     end
   end
 
-  def mean_hypothesis_test(hash)
+  def mean_hypothesis_test(hash=@hash,significance=0.05)
     get_variables(hash)
     t_star = (@mean1 - @mean2).quo(Math.sqrt(@var1 / (@nu1 + 1) + @var2 / (@nu2 + 1)))
     t_critical = TestStatisticHelper::initialize_with(:distribution=>:t,
-                                                      :p=>@alpha / 2,
+                                                      :p=>significance / 2,
                                                       :degrees_of_freedom=>@nu1 + @nu2)
     true if t_star.abs >= t_critical.abs
   end
 
   def mean_test_results(hash=@hash,significance=0.05)
-    { :equal_mean? => equal_response_time?(hash,significance), :significance => @alpha }
+    { :equal_mean? => equal_response_time?(hash,significance), :significance => significance }
   end
 
   def process_args(hash,significance)
@@ -48,24 +48,24 @@ module HypothesisTest
     end
   end
 
-  def variance_hypothesis_test(hash)
+  def variance_hypothesis_test(hash,significance)
     get_variables(hash)
     f_star = @var1.quo(@var2)
     f_critical_1 = TestStatisticHelper::initialize_with(:distribution        =>:f,
-                                                        :p                   =>@alpha / 2,
-                                                        :tail                =>'right',
-                                                        :degrees_of_freedom_1=>@nu1,
-                                                        :degrees_of_freedom_2=>@nu2)
-    f_critical_2 = TestStatisticHelper::initialize_with(:distribution        =>:f,
-                                                        :p                   =>@alpha / 2,
+                                                        :p                   =>significance / 2,
                                                         :tail                =>'left',
                                                         :degrees_of_freedom_1=>@nu1,
                                                         :degrees_of_freedom_2=>@nu2)
-    true if f_star > f_critical_1 || f_star < f_critical_2
+    f_critical_2 = TestStatisticHelper::initialize_with(:distribution        =>:f,
+                                                        :p                   =>significance / 2,
+                                                        :tail                =>'right',
+                                                        :degrees_of_freedom_1=>@nu1,
+                                                        :degrees_of_freedom_2=>@nu2)
+    true if ((f_star < f_critical_1) || (f_star > f_critical_2))
   end
 
   def variance_test_results(hash=@hash,significance=0.05)
-    { :equal_variance? => equal_variability?(hash,significance), :significance => @alpha }
+    { :equal_variance? => equal_variability?(hash,significance), :significance => significance }
   end
 end
 
