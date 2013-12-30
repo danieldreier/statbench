@@ -32,15 +32,27 @@ describe HypothesisTest do
 
       it 'allows user to choose a significance level' do 
         processor = DataAnalyst.new(DATASET_4,DATASET_5)
-        expect(processor.equal_response_time?(0.001)).to be_true
-        expect(processor.equal_response_time?(0.05)).to be_false
+        expect(processor.equal_response_time?(processor.hash,0.001)).to be_true
+        expect(processor.equal_response_time?(processor.hash,0.05)).to be_false
       end
 
       it 'uses the 0.05 significance level by default' do 
         processor = DataAnalyst.new(DATASET_4,DATASET_5)
-        expect(processor.equal_response_time?(0.05)).to eql(processor.equal_response_time?)
+        expect(processor.equal_response_time?(processor.hash,0.05)).to eql(processor.equal_response_time?)
       end
     end # '#equal_response_time?'
+
+    describe '#mean_hypothesis_test' do 
+      it 'returns false when response times equal' do 
+        processor = DataAnalyst.new(DATASET_1,DATASET_1)
+        expect(processor.mean_hypothesis_test).to be_false
+      end
+
+      it 'returns true when response times unequal' do 
+        processor = DataAnalyst.new(DATASET_1,DATASET_3)
+        expect(processor.mean_hypothesis_test).to be_true
+      end
+    end
   end # 'testing two means'
 
   describe 'testing two variances' do 
@@ -56,14 +68,14 @@ describe HypothesisTest do
       end
 
       it 'allows user to choose significance level' do 
-        processor = DataAnalyst.new(DATASET_4,DATASET_5)
-        expect(processor.equal_variability?(0.001)).to be_true
-        expect(processor.equal_variability?(0.3)).to be_false
+        processor = DataAnalyst.new(DATASET_2,DATASET_1)
+        expect(processor.equal_variability?(processor.hash,0.001)).to be_true
+        expect(processor.equal_variability?(processor.hash,0.5)).to be_false
       end
 
       it 'uses the 0.05 significance level by default' do 
         processor = DataAnalyst.new(DATASET_4,DATASET_5)
-        expect(processor.equal_variability?(0.05)).to eql(processor.equal_variability?)
+        expect(processor.equal_variability?(processor.hash,0.05)).to eql(processor.equal_variability?)
       end
     end # '#equal_variability?'
   end # 'testing two variances'
