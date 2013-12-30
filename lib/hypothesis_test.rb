@@ -7,12 +7,10 @@ module HypothesisTest
   include TestStatisticHelper
 
   def equal_response_time?(hash=@hash,significance=0.05)
-    process_args(hash,significance)
     true unless mean_hypothesis_test(hash,significance)
   end
 
   def equal_variability?(hash=@hash,significance=0.05)
-    process_args(hash,significance)
     true unless variance_hypothesis_test(hash,significance)
   end
 
@@ -34,18 +32,6 @@ module HypothesisTest
 
   def mean_test_results(hash=@hash,significance=0.05)
     { :equal_mean? => equal_response_time?(hash,significance), :significance => significance }
-  end
-
-  def process_args(hash,significance)
-    if hash.instance_of? Float 
-      @alpha = hash
-      @hash  = self.hash  # self is DataAnalyst
-    elsif hash.instance_of?( Hash) && significance.instance_of?( Float)
-      @hash  = hash 
-      @alpha = significance || 0.05
-    else
-      raise(ArgumentError,'Invalid arguments')
-    end
   end
 
   def variance_hypothesis_test(hash,significance)
