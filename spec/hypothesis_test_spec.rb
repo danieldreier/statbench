@@ -6,14 +6,16 @@ describe HypothesisTest do
     describe '#mean_test_results' do 
       it 'gives significance level and outcome' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_2)
-        expect(processor.mean_test_results).to eql({ :equal_mean? => true, :significance => 0.05})
+        expect(processor.mean_test_results).to eql({ :summary => "mean response time hasn't changed", 
+                                                     :confidence => 0.95})
       end
     end
 
     describe '#variance_test_results' do 
       it 'gives significance level and outcome' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_2)
-        expect(processor.variance_test_results).to eql({ :equal_variance? => true, :significance => 0.05 })
+        expect(processor.variance_test_results).to eql({ :summary    => "variability in response time hasn't changed", 
+                                                         :confidence => 0.05 })
       end
     end
   end # 'test results'
