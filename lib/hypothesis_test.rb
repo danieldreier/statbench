@@ -7,10 +7,12 @@ module HypothesisTest
   include TestStatisticHelper
 
   def equal_response_time?(hash=@hash,significance=0.05)
+    raise(ArgumentError,'Please pass a hash to #equal_response_time?') unless hash.instance_of? Hash
     true unless mean_hypothesis_test(hash,significance)
   end
 
   def equal_variability?(hash=@hash,significance=0.05)
+    raise(ArgumentError,'Please pass a hash to #equal_variability?') unless hash.instance_of? Hash
     true unless variance_hypothesis_test(hash,significance)
   end
 
