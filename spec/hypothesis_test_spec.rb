@@ -77,7 +77,7 @@ describe HypothesisTest do
 
       it 'uses the 0.05 significance level by default' do 
         processor = DataAnalyst.new(DATASET_4,DATASET_5)
-        expect(processor.more_consistent?(processor.hash,0.05)).to eql(processor.equal_variability?)
+        expect(processor.more_consistent?(processor.hash,0.05)).to eql(processor.more_consistent?)
       end
     end # '::more_consistent?'
   end # 'testing two variances'
