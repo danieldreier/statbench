@@ -3,46 +3,46 @@ require_relative 'spec_helper'
 describe HypothesisTest do 
   include HypothesisTest
   describe 'test results' do 
-    describe '#mean_test_results' do 
+    describe '::mean_test_results' do 
       it 'gives significance level and outcome' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_2)
-        expect(processor.mean_test_results).to eql({ :summary => "mean response time hasn't changed", 
+        expect(processor.mean_test_results).to eql({ :summary    => "mean response time hasn't changed", 
                                                      :confidence => 0.95})
       end
     end
 
-    describe '#variance_test_results' do 
+    describe '::variance_test_results' do 
       it 'gives significance level and outcome' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_2)
         expect(processor.variance_test_results).to eql({ :summary    => "variability in response time hasn't changed", 
-                                                         :confidence => 0.05 })
+                                                         :confidence => 0.95 })
       end
     end
   end # 'test results'
 
   describe 'testing two means' do 
-    describe '#equal_response_time?' do 
+    describe '::faster?' do 
       it 'returns false when response times unequal' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_3)
-        expect(processor.equal_response_time?).to be_false
+        expect(processor.faster?).to be_false
       end
 
       it 'returns true when response times are equal' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_1)
-        expect(processor.equal_response_time?).to be_true
+        expect(processor.faster?).to be_true
       end
 
-      it 'allows user to choose a significance level' do 
+      it 'uses user-specified significance level' do 
         processor = DataAnalyst.new(DATASET_4,DATASET_5)
-        expect(processor.equal_response_time?(processor.hash,0.001)).to be_true
-        expect(processor.equal_response_time?(processor.hash,0.05)).to be_false
+        expect(processor.faster?(processor.hash,0.001)).to be_true
+        expect(processor.faster?(processor.hash,0.05)).to be_false
       end
 
       it 'uses the 0.05 significance level by default' do 
         processor = DataAnalyst.new(DATASET_4,DATASET_5)
-        expect(processor.equal_response_time?(processor.hash,0.05)).to eql(processor.equal_response_time?)
+        expect(processor.faster?(processor.hash,0.05)).to eql(processor.faster?)
       end
-    end # '#equal_response_time?'
+    end # '::faster?'
 
     describe '#mean_hypothesis_test' do 
       it 'returns false when response times equal' do 
@@ -58,27 +58,27 @@ describe HypothesisTest do
   end # 'testing two means'
 
   describe 'testing two variances' do 
-    describe '#equal_variability?' do 
+    describe '::more_consistent?' do 
       it 'returns false when variability is unequal' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_3)
-        expect(processor.equal_variability?).to be_false
+        expect(processor.more_consistent?).to be_false
       end
 
       it 'returns true when variability is equal' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_1) 
-        expect(processor.equal_variability?).to be_true
+        expect(processor.more_consistent?).to be_true
       end
 
       it 'allows user to choose significance level' do 
         processor = DataAnalyst.new(DATASET_2,DATASET_1)
-        expect(processor.equal_variability?(processor.hash,0.001)).to be_true
-        expect(processor.equal_variability?(processor.hash,0.5)).to be_false
+        expect(processor.more_consistent?(processor.hash,0.001)).to be_true
+        expect(processor.more_consistent?(processor.hash,0.5)).to be_false
       end
 
       it 'uses the 0.05 significance level by default' do 
         processor = DataAnalyst.new(DATASET_4,DATASET_5)
-        expect(processor.equal_variability?(processor.hash,0.05)).to eql(processor.equal_variability?)
+        expect(processor.more_consistent?(processor.hash,0.05)).to eql(processor.equal_variability?)
       end
-    end # '#equal_variability?'
+    end # '::more_consistent?'
   end # 'testing two variances'
 end # 'describe HypothesisTest'
