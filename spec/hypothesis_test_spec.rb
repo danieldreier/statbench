@@ -54,17 +54,17 @@ describe HypothesisTest do
     describe '::more_consistent?' do 
       it 'returns true when new variability is lower' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_3)
-        expect(processor.more_consistent?).to be_true
+        expect(processor.more_consistent?(processor.hash,0.05)).to be_true
       end
 
       it 'returns false when variability is equal' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_1) 
-        expect(processor.more_consistent?).to be_false
+        expect(processor.more_consistent?(processor.hash,0.05)).to be_false
       end
 
       it 'returns false when new variability is higher' do 
         processor = DataAnalyst.new(DATASET_3,DATASET_1)
-        expect(processor.more_consistent?).to be_false
+        expect(processor.more_consistent?(processor.hash,0.05)).to be_false
       end
 
       it 'allows user to choose significance level' do 
