@@ -48,7 +48,7 @@ module HypothesisTest
     { :summary => summary, :confidence => 1 - significance }
   end
 
-  def variance_hypothesis_test_left(hash,significance)
+  def variance_hypothesis_test_left(hash=@hash,significance=0.05)
     get_variables(hash)
     f_star = @var1.quo(@var2)
     f_critical_1 = TestStatisticHelper::initialize_with(:distribution        =>:f,
