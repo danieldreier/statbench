@@ -6,16 +6,6 @@ module HypothesisTest
   include Statsample
   include TestStatisticHelper
 
-  def equal_response_time?(hash=@hash,significance=0.05)
-    raise(ArgumentError,'Please pass a hash to #equal_response_time?') unless hash.instance_of? Hash
-    true unless mean_hypothesis_test(hash,significance)
-  end
-
-  def equal_variability?(hash=@hash,significance=0.05)
-    raise(ArgumentError,'Please pass a hash to #equal_variability?') unless hash.instance_of? Hash
-    true unless variance_hypothesis_test(hash,significance)
-  end
-
   def get_variables(hash)
     hash.each do |key,value|
       name = '@' + key
@@ -32,8 +22,12 @@ module HypothesisTest
     true if t_star.abs >= t_critical.abs
   end
 
+  alias_method :faster?, :mean_hypothesis_test
+
   def mean_test_results(hash=@hash,significance=0.05)
-    { :equal_mean? => equal_response_time?(hash,significance), :significance => significance }
+    summary = if faster?(hash,significance) then "configuration 2 is faster";
+    else "mean response time hasn't changed"; end
+    { :summary => summary, :confidence => 1 - significance }
   end
 
   def variance_hypothesis_test(hash,significance)
@@ -52,8 +46,12 @@ module HypothesisTest
     true if ((f_star < f_critical_1) || (f_star > f_critical_2))
   end
 
+  alias_method :more_consistent?, :variance_hypothesis_test
+
   def variance_test_results(hash=@hash,significance=0.05)
-    { :equal_variance? => equal_variability?(hash,significance), :significance => significance }
+    summary = if more_consistent?(hash,significance) then "configuration 2 is more consistent";
+    else "variability in response time hasn't changed"; end
+    { :summary => summary, :confidence => 1 - significance }
   end
 end
 
