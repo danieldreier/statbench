@@ -27,8 +27,6 @@ module HypothesisTest
     t_critical = TestStatisticHelper::initialize_with(:distribution=>:t,
                                                       :p=>1 - significance,
                                                       :degrees_of_freedom=>@nu1 + @nu2)
-    puts "t_crit = #{t_critical}"
-    puts "t*     = #{t_star}"
     true if t_star >= t_critical
   end
 
