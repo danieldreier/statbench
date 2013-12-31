@@ -57,12 +57,12 @@ describe HypothesisTest do
         expect(processor.more_consistent?).to be_true
       end
 
-      it 'returns true when variability is equal' do 
+      it 'returns false when variability is equal' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_1) 
-        expect(processor.more_consistent?).to be_true
+        expect(processor.more_consistent?).to be_false
       end
 
-      it 'returns true when new variability is higher' do 
+      it 'returns false when new variability is higher' do 
         processor = DataAnalyst.new(DATASET_3,DATASET_1)
         expect(processor.more_consistent?).to be_false
       end
