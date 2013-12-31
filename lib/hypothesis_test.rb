@@ -1,3 +1,10 @@
+# I am going to make one thing really clear up front about mean hypothesis tests:
+# A FASTER CONFIGURATION MEANS A *LOWER* MEAN RESPONSE TIME. We are testing whether
+# the new configuration is faster than the old one:
+# H0: mu1 < mu2
+# H1: mu1 >= mu2
+# In other words, this is a right-tailed test for mean.
+
 require 'statsample'
 require_relative 'test_statistic'
 require_relative '../spec/data'
@@ -13,13 +20,16 @@ module HypothesisTest
     end
   end
 
+  # Right-tailed test
   def mean_hypothesis_test(hash=@hash,significance=0.05)
     get_variables(hash)
     t_star = (@mean1 - @mean2).quo(Math.sqrt(@var1 / (@nu1 + 1) + @var2 / (@nu2 + 1)))
     t_critical = TestStatisticHelper::initialize_with(:distribution=>:t,
-                                                      :p=>significance / 2,
+                                                      :p=>1 - significance,
                                                       :degrees_of_freedom=>@nu1 + @nu2)
-    true if t_star.abs >= t_critical.abs
+    puts "t_crit = #{t_critical}"
+    puts "t*     = #{t_star}"
+    true if t_star >= t_critical
   end
 
   alias_method :faster?, :mean_hypothesis_test
