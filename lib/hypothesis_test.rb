@@ -20,21 +20,31 @@ module HypothesisTest
     end
   end
 
+  def mean_hypothesis_test_left(hash=@hash,significance=0.05)
+    get_variables(hash)
+    t_star = (@mean2 - @mean1).quo(Math.sqrt(@var1 / (@nu1 + 1) + @var2/ (@nu2 + 2)))
+    t_critical = TestStatisticHelper::initialize_with(:distribution       => :t,
+                                                      :p                  => significance,
+                                                      :degrees_of_freedom => @nu1 + @nu2)
+    true if t_star <= t_critical
+  end
+
   # Right-tailed test
-  def mean_hypothesis_test(hash=@hash,significance=0.05)
+  def mean_hypothesis_test_right(hash=@hash,significance=0.05)
     get_variables(hash)
     t_star = (@mean1 - @mean2).quo(Math.sqrt(@var1 / (@nu1 + 1) + @var2 / (@nu2 + 1)))
-    t_critical = TestStatisticHelper::initialize_with(:distribution=>:t,
-                                                      :p=>1 - significance,
-                                                      :degrees_of_freedom=>@nu1 + @nu2)
+    t_critical = TestStatisticHelper::initialize_with(:distribution       => :t,
+                                                      :p                  => 1 - significance,
+                                                      :degrees_of_freedom => @nu1 + @nu2)
     true if t_star >= t_critical
   end
 
-  alias_method :faster?, :mean_hypothesis_test
+  alias_method :faster?, :mean_hypothesis_test_right
 
   def mean_test_results(hash=@hash,significance=0.05)
     summary = if faster?(hash,significance) then "configuration 2 is faster";
-    else "mean response time hasn't changed"; end
+    elsif mean_hypothesis_test_left(hash,significance) then "configuration 2 is slower";
+    else "mean response time hasn't changed" end
     { :summary => summary, :confidence => 1 - significance }
   end
 
