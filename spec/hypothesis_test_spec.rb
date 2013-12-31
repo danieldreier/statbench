@@ -22,14 +22,19 @@ describe HypothesisTest do
 
   describe 'testing two means' do 
     describe '::faster?' do 
-      it 'returns false when response times unequal' do 
+      it 'returns be_true when new response time is faster' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_3)
+        expect(processor.faster?).to be_true
+      end
+
+      it 'returns false when response times are equal' do 
+        processor = DataAnalyst.new(DATASET_1,DATASET_1)
         expect(processor.faster?).to be_false
       end
 
-      it 'returns true when response times are equal' do 
-        processor = DataAnalyst.new(DATASET_1,DATASET_1)
-        expect(processor.faster?).to be_true
+      it 'returns false when new response time is slower' do 
+        processor = DataAnalyst.new(DATASET_3,DATASET_1)
+        expect(processor.faster?).to be_false
       end
 
       it 'uses user-specified significance level' do 
@@ -43,25 +48,13 @@ describe HypothesisTest do
         expect(processor.faster?(processor.hash,0.05)).to eql(processor.faster?)
       end
     end # '::faster?'
-
-    describe '#mean_hypothesis_test' do 
-      it 'returns false when response times equal' do 
-        processor = DataAnalyst.new(DATASET_1,DATASET_1)
-        expect(processor.mean_hypothesis_test).to be_false
-      end
-
-      it 'returns true when response times unequal' do 
-        processor = DataAnalyst.new(DATASET_1,DATASET_3)
-        expect(processor.mean_hypothesis_test).to be_true
-      end
-    end
   end # 'testing two means'
 
   describe 'testing two variances' do 
     describe '::more_consistent?' do 
-      it 'returns false when variability is unequal' do 
+      it 'returns true when new variability is lower' do 
         processor = DataAnalyst.new(DATASET_1,DATASET_3)
-        expect(processor.more_consistent?).to be_false
+        expect(processor.more_consistent?).to be_true
       end
 
       it 'returns true when variability is equal' do 
@@ -69,10 +62,15 @@ describe HypothesisTest do
         expect(processor.more_consistent?).to be_true
       end
 
+      it 'returns true when new variability is higher' do 
+        processor = DataAnalyst.new(DATASET_3,DATASET_1)
+        expect(processor.more_consistent?).to be_false
+      end
+
       it 'allows user to choose significance level' do 
         processor = DataAnalyst.new(DATASET_2,DATASET_1)
-        expect(processor.more_consistent?(processor.hash,0.001)).to be_true
-        expect(processor.more_consistent?(processor.hash,0.5)).to be_false
+        expect(processor.more_consistent?(processor.hash,0.001)).to be_false
+        expect(processor.more_consistent?(processor.hash,0.5)).to be_true
       end
 
       it 'uses the 0.05 significance level by default' do 
