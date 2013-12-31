@@ -39,8 +39,8 @@ describe HypothesisTest do
 
       it 'uses user-specified significance level' do 
         processor = DataAnalyst.new(DATASET_4,DATASET_5)
-        expect(processor.faster?(processor.hash,0.001)).to be_true
-        expect(processor.faster?(processor.hash,0.05)).to be_false
+        expect(processor.faster?(processor.hash,0.001)).to be_false
+        expect(processor.faster?(processor.hash,0.05)).to be_true
       end
 
       it 'uses the 0.05 significance level by default' do 
