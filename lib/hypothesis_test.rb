@@ -48,7 +48,7 @@ module HypothesisTest
     { :summary => summary, :confidence => 1 - significance }
   end
 
-  def variance_hypothesis_test(hash,significance)
+  def variance_hypothesis_test_left(hash,significance)
     get_variables(hash)
     f_star = @var1.quo(@var2)
     f_critical_1 = TestStatisticHelper::initialize_with(:distribution        =>:f,
@@ -64,7 +64,7 @@ module HypothesisTest
     true if ((f_star < f_critical_1) || (f_star > f_critical_2))
   end
 
-  alias_method :more_consistent?, :variance_hypothesis_test
+  alias_method :more_consistent?, :variance_hypothesis_test_left
 
   def variance_test_results(hash=@hash,significance=0.05)
     summary = if more_consistent?(hash,significance) then "configuration 2 is more consistent";
