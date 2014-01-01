@@ -11,19 +11,6 @@ require_relative 'test_statistic'
 module ConfidenceInterval
   include Statsample
   include TestStatisticHelper
-  
-  def process_args(hash,confidence_level=nil)
-    if hash.instance_of? Float 
-      @alpha = 1 - hash
-      @hash = self.hash
-    elsif hash.instance_of? Hash
-      @hash = hash
-      @alpha = if confidence_level then 1 - confidence_level; else 0.05; end
-    else
-      raise(ArgumentError,'Invalid arguments')
-    end
-    get_variables(@hash)
-  end
 
   # The #get_variables method is also present in HypothesisTest.
   # When we refactor we will want to extract these to DRY it up.
@@ -41,7 +28,7 @@ module ConfidenceInterval
   end
 
   def mean_difference(hash=@hash,confidence=0.95)
-    process_args(hash)
+    get_variables(hash)
     t = TestStatisticHelper::initialize_with(:distribution       => :t,
                                              :alpha              => @alpha / 2,
                                              :degrees_of_freedom => @nu1 + @nu2)
@@ -53,7 +40,7 @@ module ConfidenceInterval
   end
 
   def sdev_difference(hash=@hash,confidence=0.95)
-    process_args(hash,confidence)
+    get_variables(hash)
     f1 = TestStatisticHelper::initialize_with(:distribution         => :f, 
                                               :degrees_of_freedom_1 => @nu1,
                                               :degrees_of_freedom_2 => @nu2,
