@@ -23,16 +23,16 @@ module ConfidenceInterval
 
   def mean_interval(statistic,point_estimate)
     std_error = standard_error
-    [(point_estimate - statistic.abs*std_error).round(5), 
+    [(point_estimate - statistic.abs * std_error).round(5), 
      (point_estimate + statistic.abs * std_error).round(5) ]
   end
 
   def mean_difference(hash=@hash,confidence=0.95)
     get_variables(hash)
     t = TestStatisticHelper::initialize_with(:distribution       => :t,
-                                             :alpha              => @alpha / 2,
+                                             :alpha              => (1 - confidence) / 2,
                                              :degrees_of_freedom => @nu1 + @nu2)
-    { :interval => mean_interval(t,@mean1 - @mean2), :confidence => 1 - @alpha }
+    { :interval => mean_interval(t,@mean1 - @mean2), :confidence => confidence }
   end
 
   def standard_error
@@ -45,14 +45,14 @@ module ConfidenceInterval
                                               :degrees_of_freedom_1 => @nu1,
                                               :degrees_of_freedom_2 => @nu2,
                                               :tail                 => 'right',
-                                              :alpha                => @alpha / 2 )
+                                              :alpha                => (1 - confidence) / 2 )
     f2 = TestStatisticHelper::initialize_with(:distribution         => :f, 
                                               :degrees_of_freedom_1 => @nu1,
                                               :degrees_of_freedom_2 => @nu2,
                                               :tail                 => 'left',
-                                              :alpha                => @alpha / 2)
+                                              :alpha                => (1 - confidence) / 2)
     point_estimate = @var1 / @var2
     interval = [ Math.sqrt(point_estimate / f1).round(5), Math.sqrt(point_estimate / f2).round(5) ]
-    { :interval => interval, :confidence => 1 - @alpha }
+    { :interval => interval, :confidence => confidence }
   end
 end
