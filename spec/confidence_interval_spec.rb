@@ -11,11 +11,12 @@ describe ConfidenceInterval do
     end
 
     it 'uses 95% confidence level by default' do 
-      expect(@processor.mean_difference).to eql(@processor.mean_difference(0.95))
+      expect(@processor.mean_difference).to eql(@processor.mean_difference(@processor.hash,0.95))
     end
 
     it 'allows user to specify confidence level' do 
-      expect(@processor.mean_difference(0.99)).to eql({ :interval => [ -3.76344, 2.54424 ], :confidence => 0.99})
+      expect(@processor.mean_difference(@processor.hash,0.99)).to eql({ :interval => [ -3.76344, 2.54424 ], 
+                                                                        :confidence => 0.99})
     end
   end # 'mean intervals'
 
@@ -25,7 +26,7 @@ describe ConfidenceInterval do
     end
 
     it 'uses 95% confidence level by default' do 
-      expect(@processor.sdev_difference).to eql(@processor.sdev_difference(0.95))
+      expect(@processor.sdev_difference).to eql(@processor.sdev_difference(@processor.hash,0.95))
     end
 
     it 'allows user to specify confidence level' do 
