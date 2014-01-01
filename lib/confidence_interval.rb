@@ -12,8 +12,6 @@ module ConfidenceInterval
   include Statsample
   include TestStatisticHelper
   
-  # The #process_args method is also present in HypothesisTest.
-  # When we refactor we will want to extract these to DRY it up.
   def process_args(hash,confidence_level=nil)
     if hash.instance_of? Float 
       @alpha = 1 - hash
