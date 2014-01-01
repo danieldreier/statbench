@@ -48,27 +48,39 @@ module HypothesisTest
     { :summary => summary, :confidence => 1 - significance }
   end
 
+  # If this test is true, there's been an improvement in variability
   def variance_hypothesis_test_left(hash=@hash,significance=0.05)
     get_variables(hash)
-    f_star = @var1.quo(@var2)
-    f_critical_1 = TestStatisticHelper::initialize_with(:distribution        =>:f,
-                                                        :p                   =>significance / 2,
-                                                        :tail                =>'left',
-                                                        :degrees_of_freedom_1=>@nu1,
-                                                        :degrees_of_freedom_2=>@nu2)
-    f_critical_2 = TestStatisticHelper::initialize_with(:distribution        =>:f,
-                                                        :p                   =>significance / 2,
-                                                        :tail                =>'right',
-                                                        :degrees_of_freedom_1=>@nu1,
-                                                        :degrees_of_freedom_2=>@nu2)
-    true if ((f_star < f_critical_1) || (f_star > f_critical_2))
+    f_star       = @var1.quo(@var2)
+    f_critical   = TestStatisticHelper::initialize_with(  :distribution         => :f,
+                                                          :p                    => significance,
+                                                          :tail                 => 'left',
+                                                          :degrees_of_freedom_1 => @nu1,
+                                                          :degrees_of_freedom_2 => @nu2 )
+    puts "@var1  = #{@var1}"
+    puts "@var2  = #{@var2}"
+    puts "f_crit = #{f_critical}"
+    puts "f_star = #{f_star}"
+    true if f_star < f_critical
   end
 
-  alias_method :more_consistent?, :variance_hypothesis_test_left
+  def variance_hypothesis_test_right(hash=@hash,significance=0.05)
+    get_variables(hash)
+    f_star     = @var1.quo(@var2)
+    f_critical =TestStatisticHelper::initialize_with( :distribution         => :f,
+                                                      :p                    => significance,
+                                                      :tail                 => 'right',
+                                                      :degrees_of_freedom_1 => @nu1,
+                                                      :degrees_of_freedom_2 => @nu2 )
+    true if f_star > f_critical
+  end
+
+  alias_method :more_consistent?, :variance_hypothesis_test_right
 
   def variance_test_results(hash=@hash,significance=0.05)
     summary = if more_consistent?(hash,significance) then "configuration 2 is more consistent";
-    else "variability in response time hasn't changed"; end
+    elsif variance_hypothesis_test_left(hash,significance) then "configuration 2 is less"; 
+    else "variability in response time hasn't changed" end
     { :summary => summary, :confidence => 1 - significance }
   end
 end
