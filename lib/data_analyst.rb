@@ -1,6 +1,4 @@
 require 'statsample'
-require_relative 'hypothesis_test'
-require_relative 'confidence_interval'
 
 class DataAnalyst
   include Statsample

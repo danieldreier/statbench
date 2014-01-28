@@ -7,6 +7,7 @@
 
 require 'statsample'
 require_relative 'test_statistic'
+require_relative 'data_analyst'
 require_relative '../spec/data'
 
 module HypothesisTest
