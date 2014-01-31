@@ -1,5 +1,4 @@
 require_relative 'spec_helper'
-require_relative '../lib/data_analyst.rb'
 
 describe DataAnalyst do 
   it 'gets statistics from data sets' do 
