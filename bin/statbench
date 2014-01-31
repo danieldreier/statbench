@@ -19,252 +19,48 @@ program_desc 'statistical analysis of web server benchmark results'
 
 version Statbench::VERSION
 
-#desc 'Describe some switch here'
-#switch [:s,:switch]
+desc 'Describe some switch here'
+switch [:s,:switch]
 
-#desc 'Describe some flag here'
-#default_value 'the default'
-#arg_name 'The name of the argument'
-#flag [:f,:flagname]
+desc 'Describe some flag here'
+default_value 'the default'
+arg_name 'The name of the argument'
+flag [:f,:flagname]
 
-desc 'Calculate summary statistics'
-arg_name 'filename'
-command :summarize do |c|
-  c.desc 'Display summary statistics of a dataset'
-  c.switch :boxplot
-  
-  #c.desc 'Describe a flag to summarize'
-  #c.default_value 'default'
-  #c.flag :f
+desc 'Describe summary here'
+arg_name 'Describe arguments to summary here'
+command :summary do |c|
+  c.desc 'Describe a switch to summary'
+  c.switch :s
+
+  c.desc 'Describe a flag to summary'
+  c.default_value 'default'
+  c.flag :f
   c.action do |global_options,options,args|
 
     # Your command logic here
-    
-
-   args.each do |filename|
-       data = Array.new
-      File.open("#{filename}", "r").each_line do |line|
-        data << line.to_f
-      end
-      calc = Calculator.new
-      @output = calc.summary_stats(data)
-
-      puts "Summary statistics for #{filename}:"
-      @output.each do |name,data|
-        puts "\t #{name}: #{data}"
-      end
-      puts "\n"
-    end
-
+     
     # If you have any errors, just raise them
     # raise "that command made no sense"
+
+    puts "summary command ran"
   end
 end
 
-desc 'display fancy report'
-arg_name 'filename'
-command :fancyreport do |c|
-  c.desc 'Display an HTML report on one or more datasets'
-  
+desc 'Describe test here'
+arg_name 'Describe arguments to test here'
+command :test do |c|
   c.action do |global_options,options,args|
-  data = Hash.new
-
-  args.each do |filename|
-    data["#{filename}"] = Array.new
-    File.open("#{filename}", "r").each_line do |line|
-      data["#{filename}"] << line.to_f
-    end
-  end
-  
-  calc = Calculator.new
-  filename = 'chart_template.erb'
-  @report_title = 'Sample Report Title'
-
-  report_options = {  
-    :title => "Title", 
-  }
-  
-  @barchart = Hash.new
-  @barchart = { 
-    :title => "Load time histogram",
-    :xaxis => "data points in range",
-    :yaxis => "load time (seconds)",
-    :data  => [
-      ['Load time (sec)', 'Sales', 'Expenses'],
-      ['1',  1000,      400],
-      ['.5',  1170,      460],
-      ['.25',  660,       1120],
-      ['.1',  1030,      540],
-    ],
-  }
-
-  # Calculations to prepare data for scatterplot
-  length = []
-  data.each do |array|
-    length << array[1].length
-  end
-
-  shortest_length = length.sort.first
-
-  combined = []
-  for row in (0..shortest_length - 1) do
-    combined[row] = Array.new
-    combined[row] << row.to_i
-    data.each_key do |filename|
-      combined[row] << data["#{filename}"][row].to_f
-    end
-  end
-
-@combined_scatterplot_data = Array.new
-# Add reasonable row headers
-first_row = ['Sample #']
-data.each do |array|
-  first_row << Pathname.new(array[0]).basename.to_s
-end
-@combined_scatterplot_data << first_row
-
-for row_number in (0..shortest_length - 1) do
-  temp_array = Array.new  # Re-create with each row
-  temp_array << row_number
-  data.each_key do |key|
-    temp_array << "#{data[key][row_number]}".to_f
-  end
-  @combined_scatterplot_data << temp_array
-end
-
-
-  @scatterplot = { 
-    :title => "Plot of all data",
-    :xaxis => "test",
-    :yaxis => "load time (seconds)", 
-    :data => @combined_scatterplot_data
-  }
-
-@combined_boxplot_data = Array.new
-# Add reasonable row headers
-
-@combined_boxplot_data << ['ID', 'lower_fence', 'lower quartile', 'upper quartile', 'upper_fence', 'Median']
-
-data.each do |filename,sample|
-  stats = calc.summary_stats(sample)
-  @combined_boxplot_data << [Pathname.new(filename).basename.to_s, 
-    stats[:lower_fence], 
-    stats[:quartile_1], 
-    stats[:quartile_3], 
-    stats[:upper_fence], 
-    stats[:median]]
-end
-  @boxplot = {
-    :title => "Load time variability across datasets", 
-    :type  => 'BarChart',
-    :xaxis => "test",
-    :yaxis => "load time (seconds)",
-    :data  => @combined_boxplot_data,
-  }
-
-=begin
-  @boxplot = {
-    :title => "sample box plot", 
-    :type  => 'BarChart',
-    :xaxis => "test",
-    :yaxis => "load time (seconds)",
-    :data  => [
-                ['ID', 'lower_fence', 'lower quartile', 'upper quartile', 'upper_fence', 'Median'],
-                ['Serie1', 20, 50, 100, 200, 300],
-                ['Serie2', 31, 38, 55, 66, 30],
-                ['Serie3', 50, 55, 77, 80, 10],
-                ['Serie4', 77, 77, 66, 90, 20],
-                ['Serie5', 68, 66, 22, 15, 30],
-              ],
-  }
-=end
-  erb = ERB.new(File.read(filename))
-
-  puts erb.result
-
+    puts "test command ran"
   end
 end
 
-desc 'print outlier data points'
-arg_name 'filename'
-command :outliers do |c|
-  c.desc 'Invert matching, to select non-outlier data points'
-  c.switch [:v,:'invert-match']
+desc 'Describe diff here'
+arg_name 'Describe arguments to diff here'
+command :diff do |c|
   c.action do |global_options,options,args|
-    data = Array.new
-    ARGF.readlines.each do |line|
-      data << line.to_f
-    end
-    calc = Calculator.new
-    
-    @output = calc.find_outliers(data) unless options[:v]
-    @output = calc.trim(data) if options[:v]
-    
-    @output.each do |number|
-      puts number
-    end
+    puts "diff command ran"
   end
-end
-
-
-desc 'Convert multiple files to CSV'
-arg_name 'filename1 filename2 [filename3 ...]'
-command :join do |c|
-  c.desc 'Join multiple individual files into a CSV'
-
-  c.action do |global_options,options,args|
-   series=1
-   args.each do |filename|
-     data = Array.new
-     File.open("#{filename}", "r").each_line do |line|
-       data << line.to_f
-     end
-      
-     counter=1
-     data.each do |loadtime|
-       puts "#{series},#{counter},#{loadtime}"
-       counter += 1
-     end
-     series += 1
-    end
-  end
-end
-
-desc 'Generate HTML summary report'
-arg_name 'filename1 filename2 [filename3 ...]'
-command :report do |c|
-  c.desc 'Generate a summary HTML report of multiple data files'
-
-  c.action do |global_options,options,args|
-    @rb=ReportBuilder.new
-    @rb.name = "Web Server Performance Data"
-    @datasets=Hash.new  
-    args.each do |filename|
-      @datasets["#{filename}"] = Array.new.to_scale
-      File.open("#{filename}", "r").each_line do |line|
-        @datasets["#{filename}"].add(line.to_f)
-      end
-    end
-
-    arr = []
-    @datasets.each_key do |key|
-    @datasets["#{key}"].name = "#{key}"
-      arr << @datasets["#{key}"]
-    end
-
-    @datasets.each do |filename,data|
-      @rb.add(Statsample::Graph::Histogram.new(data,{:name=>"Load time distribution of #{filename}",:bins=>10}))
-
-      data_numbers=*(1..data.to_a.length)
-      @rb.add(Statsample::Graph::Scatterplot.new(data_numbers.to_scale,data,{:name => "All datapoints in #{filename}"}))
-    end
-
-    @rb.add(Statsample::Graph::Boxplot.new(:vectors=>arr,:name=>"Box plot for data comparison",:height => 700))
-    @rb.save_html('summary_report.html')
-  end
-  #rb.add(Statsample::Graph::Boxplot.new(:vectors=>datasets,:name=>"boxplot"))
-  
-
 end
 
 pre do |global,command,options,args|
