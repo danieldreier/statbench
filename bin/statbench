@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'gli'
-require 'calculator'
+require 'data_analyst'
 begin # XXX: Remove this begin/rescue before distributing your app
 require 'statbench'
 require 'reportbuilder'
@@ -27,8 +27,8 @@ default_value 'the default'
 arg_name 'The name of the argument'
 flag [:f,:flagname]
 
-desc 'Describe summary here'
-arg_name 'Describe arguments to summary here'
+desc 'Summarize results of hypothesis test'
+arg_name '[OPTIONS] [FILE1] [FILE2]'
 command :summary do |c|
   c.desc 'Describe a switch to summary'
   c.switch :s
