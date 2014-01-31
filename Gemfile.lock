@@ -4,6 +4,7 @@ PATH
     statbench (0.0.1)
       gli (= 2.8.1)
       statbench
+      statistics2
 
 GEM
   remote: https://rubygems.org/
@@ -81,6 +82,7 @@ PLATFORMS
 
 DEPENDENCIES
   aruba
+  distribution
   rake
   rdoc
   statbench!
