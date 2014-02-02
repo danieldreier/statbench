@@ -12,23 +12,22 @@ class DataAnalyst
   attr_reader :hash
 
   def initialize(file1,file2)
-    data1 = Array.new; data2 = Array.new
-    File.open(file1) do |file|
-      file.each_line do |line|
-        data1 << line.chomp!.to_f
-      end
-    end
-    File.open(file2) do |file|
-      file.each_line do |line|
-        data2 << line.chomp!.to_f
-      end
-    end
-    @data1 = data1.to_scale
-    @data2 = data2.to_scale
-    process
+    @data1 = process_file(file1)
+    @data2 = process_file(file2)
+    process_data
   end
 
-  def process
+  def process_file(data_file)
+    arr = Array.new
+    File.open(data_file) do |file|
+      file.each_line do |line|
+        arr << line.chomp!.to_f
+      end
+    end
+    arr.to_scale
+  end
+
+  def process_data
     @hash = { 'nu1' => @data1.size - 1, 'mean1' => @data1.mean.round(4), 'var1' => @data1.variance_sample.round(4),
               'nu2' => @data2.size - 1, 'mean2' => @data2.mean.round(4), 'var2' => @data2.variance_sample.round(4)
             }
@@ -44,7 +43,7 @@ class DataAnalyst
   end
 
   def summary_stats
-    #
+    # TBD
   end
 end
 
