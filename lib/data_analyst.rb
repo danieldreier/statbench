@@ -17,14 +17,13 @@ class DataAnalyst
     process_data
   end
 
-  def process_file(data_file)
-    arr = Array.new
-    File.open(data_file) do |file|
-      file.each_line do |line|
-        arr << line.chomp!.to_f
-      end
+  def change_data(existing_dataset,new_data)
+    case existing_dataset
+    when "old" || "data1"
+      @data1 = if new_data.class == Vector then new_data; else new_data.to_scale; end 
+    when "new" || "data2"
+      @data2 = if new_data.class == Vector then new_data; else new_data.to_scale; end 
     end
-    arr.to_scale
   end
 
   def process_data
@@ -33,13 +32,14 @@ class DataAnalyst
             }
   end
 
-  def change_data(existing_dataset,new_data)
-    case existing_dataset
-    when "old" || "data1"
-      @data1 = if new_data.class == Vector then new_data; else new_data.to_scale; end 
-    when "new" || "data2"
-      @data2 = if new_data.class == Vector then new_data; else new_data.to_scale; end 
+  def process_file(data_file)
+    arr = Array.new
+    File.open(data_file) do |file|
+      file.each_line do |line|
+        arr << line.chomp!.to_f
+      end
     end
+    arr.to_scale
   end
 
   def summary_stats
