@@ -1,4 +1,6 @@
 require 'statsample'
+require_relative 'confidence_interval'
+require_relative 'hypothesis_test'
 
 class DataAnalyst
   include Statsample
@@ -19,6 +21,19 @@ class DataAnalyst
     @hash = { 'nu1' => @data1.size - 1, 'mean1' => @data1.mean.round(4), 'var1' => @data1.variance_sample.round(4),
               'nu2' => @data2.size - 1, 'mean2' => @data2.mean.round(4), 'var2' => @data2.variance_sample.round(4)
             }
+  end
+
+  def change_data(existing_dataset,new_data)
+    case existing_dataset
+    when "old" || "data1"
+      @data1 = if new_data.class == Vector then new_data; else new_data.to_scale; end 
+    when "new" || "data2"
+      @data2 = if new_data.class == Vector then new_data; else new_data.to_scale; end 
+    end
+  end
+
+  def summary_stats
+    #
   end
 end
 
