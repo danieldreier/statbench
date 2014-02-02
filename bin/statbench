@@ -22,10 +22,15 @@ version Statbench::VERSION
 desc 'Describe some switch here'
 switch [:s,:switch]
 
-desc 'Describe some flag here'
-default_value 'the default'
-arg_name 'The name of the argument'
-flag [:f,:flagname]
+desc 'Old configuration'
+default_value 'None'
+arg_name 'Data from old configuration'
+flag [:o,:old]
+
+desc 'New configuration'
+default_value 'None'
+arg_name 'Data from new configuration'
+flag [:n, :new]
 
 desc 'Describe compare here'
 arg_name 'Describe arguments to compare here'
