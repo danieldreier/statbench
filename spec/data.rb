@@ -1,11 +1,11 @@
 # data.rb: Data sets for use in Statbench RSpec tests
 
-DATA_FILE_1 = './data_files/data1.txt'
-DATA_FILE_2 = './data_files/data2.txt'
-DATA_FILE_3 = './data_files/data3.txt'
-DATA_FILE_4 = './data_files/data4.txt'
-DATA_FILE_5 = './data_files/data5.txt'
-DATA_FILE_6 = './data_files/data6.txt'
+DATA_FILE_1 = '../spec/data_files/data1.txt'
+DATA_FILE_2 = '../spec/data_files/data2.txt'
+DATA_FILE_3 = '../spec/data_files/data3.txt'
+DATA_FILE_4 = '../spec/data_files/data4.txt'
+DATA_FILE_5 = '../spec/data_files/data5.txt'
+DATA_FILE_6 = '../spec/data_files/data6.txt'
 
 # DATASET_1: n = 200, x_bar = 28.6536, s = 16.7105
 DATASET_1 = [ 33.25, 26.61, 51.67, 25.89, 49.64, 2.96, 13.33, 20.61, 38.98, 
