@@ -11,9 +11,20 @@ class DataAnalyst
   attr_reader :data2
   attr_reader :hash
 
-  def initialize(data1,data2)
-    @data1 = if data1.class == Vector then data1; else data1.to_scale; end
-    @data2 = if data2.class == Vector then data2; else data2.to_scale; end
+  def initialize(file1,file2)
+    data1 = Array.new; data2 = Array.new
+    File.open(file1) do |file|
+      file.each_line do |line|
+        data1 << line.chomp!.to_f
+      end
+    end
+    File.open(file2) do |file|
+      file.each_line do |line|
+        data2 << line.chomp!.to_f
+      end
+    end
+    @data1 = data1.to_scale
+    @data2 = data2.to_scale
     process
   end
 
