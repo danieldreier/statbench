@@ -32,8 +32,8 @@ default_value 'None'
 arg_name 'Data from new configuration'
 flag [:n, :new]
 
-desc 'Describe compare here'
-arg_name 'Describe arguments to compare here'
+desc 'Compare response time & consistency of two server configurations'
+arg_name 'Data files for old and new configurations'
 command :compare do |c|
   c.desc 'Describe a switch to compare'
   c.switch :s
