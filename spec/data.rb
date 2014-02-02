@@ -1,3 +1,12 @@
+# data.rb: Data sets for use in Statbench RSpec tests
+
+require_relative (DATA_FILE_1 = 'data_files/data1.txt')
+require_relative (DATA_FILE_2 = 'data_files/data2.txt')
+require_relative (DATA_FILE_3 = 'data_files/data3.txt')
+require_relative (DATA_FILE_4 = 'data_files/data4.txt')
+require_relative (DATA_FILE_5 = 'data_files/data5.txt')
+require_relative (DATA_FILE_6 = 'data_files/data6.txt')
+
 # DATASET_1: n = 200, x_bar = 28.6536, s = 16.7105
 DATASET_1 = [ 33.25, 26.61, 51.67, 25.89, 49.64, 2.96, 13.33, 20.61, 38.98, 
       32.06, 2.46, 16.54, 44.1, 11.94, 44.43, 50.1, 20.24, 47.26, 
