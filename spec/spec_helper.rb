@@ -3,10 +3,4 @@ require_relative '../lib/hypothesis_test.rb'
 require_relative '../lib/confidence_interval.rb'
 require_relative '../lib/test_statistic.rb'
 require_relative '../lib/test_statistic_helper.rb'
-require_relative 'data'
-require_relative DATA_FILE_1
-require_relative DATA_FILE_2
-require_relative DATA_FILE_3
-require_relative DATA_FILE_4
-require_relative DATA_FILE_5
-require_relative DATA_FILE_6
+require_relative './data.rb'
