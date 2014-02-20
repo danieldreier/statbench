@@ -14,6 +14,7 @@ class DataAnalyst
   def initialize(data1,data2)
     @data1 = if data1.instance_of? Array then data1.to_scale; else process_file(data1); end
     @data2 = if data2.instance_of? Array then data2.to_scale; else process_file(data2); end
+    process_data
   end
 
   def change_data(existing_dataset,new_data)
