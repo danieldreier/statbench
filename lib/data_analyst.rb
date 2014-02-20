@@ -25,17 +25,18 @@ class DataAnalyst
 
   def process_file(data_file)
     arr = Array.new
-    File.open(data_file) do |file|
+    File.open(data_file,'r+') do |file|
       file.each_line do |line|
         arr << line.chomp!.to_f
       end
     end
-    process_data(arr.to_scale)
+    arr.to_scale
   end
 
   def standardize_data(data)
-    if data.instance_of? File 
-      process_file(@data1)
+    if (data.instance_of? File) || (data.instance_of? String)
+      puts "Processing input file..."
+      process_file(data)
     elsif data.instance_of? Array
       data.to_scale
     elsif data.instance_of? Vector
