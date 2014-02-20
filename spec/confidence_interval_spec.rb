@@ -12,7 +12,7 @@ describe ConfidenceInterval do
     end
 
     it 'uses 95% confidence level by default' do 
-      expect(file_@processor.mean_difference).to eql(@file_processor.mean_difference(@file_processor.hash,0.95))
+      expect(@file_processor.mean_difference).to eql(@file_processor.mean_difference(@file_processor.hash,0.95))
     end
 
     it 'allows user to specify confidence level' do 
