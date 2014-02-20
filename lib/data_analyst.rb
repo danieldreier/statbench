@@ -18,8 +18,6 @@ class DataAnalyst
   end
 
   def process_data(data1=@data1,data2=@data2)
-    standardize_data(data1)
-    standardize_data(data2)
     @hash = { 'nu1' => @data1.size - 1, 'mean1' => @data1.mean.round(4), 'var1' => @data1.variance_sample.round(4),
               'nu2' => @data2.size - 1, 'mean2' => @data2.mean.round(4), 'var2' => @data2.variance_sample.round(4)
             }
