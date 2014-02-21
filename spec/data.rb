@@ -2,14 +2,14 @@
 
 # We will have to do something about this down the line but for
 # now, it makes the tests run...
-RELATIVE_PATH = "./data_files/"
+PATH = "/home/dscheider/Dropbox/Dana/rubyvm/statbench_fork/spec/data_files/"
 
-DATA_FILE_1 = RELATIVE_PATH + 'data1.txt'
-DATA_FILE_2 = RELATIVE_PATH + 'data2.txt'
-DATA_FILE_3 = RELATIVE_PATH + 'data3.txt'
-DATA_FILE_4 = RELATIVE_PATH + 'data4.txt'
-DATA_FILE_5 = RELATIVE_PATH + 'data5.txt'
-DATA_FILE_6 = RELATIVE_PATH + 'data6.txt'
+DATA_FILE_1 = PATH + 'data1.txt'
+DATA_FILE_2 = PATH + 'data2.txt'
+DATA_FILE_3 = PATH + 'data3.txt'
+DATA_FILE_4 = PATH + 'data4.txt'
+DATA_FILE_5 = PATH + 'data5.txt'
+DATA_FILE_6 = PATH + 'data6.txt'
 
 # DATASET_1: n = 200, x_bar = 28.6536, s = 16.7105
 DATASET_1 = [ 33.25, 26.61, 51.67, 25.89, 49.64, 2.96, 13.33, 20.61, 38.98, 
