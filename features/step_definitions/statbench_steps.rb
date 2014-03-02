@@ -3,7 +3,7 @@ Given(/^two data files$/) do
   @data2 = "#{ENV['PWD']}/spec/test_data/data2.txt"
 end
 
-When(/^I request summary data$/) do
+When(/^I request a comparison$/) do
   pending # express the regexp above with the code you wish you had
 end
 
