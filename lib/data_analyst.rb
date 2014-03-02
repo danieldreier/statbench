@@ -25,7 +25,7 @@ class DataAnalyst
 
   def process_file(file)
     arr = Array.new
-    File.open(data_file,'r+') do |file|
+    File.open(file,'r+') do |file|
       file.each_line do |line|
         arr << line.chomp!.to_f
       end
