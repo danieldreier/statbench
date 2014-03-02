@@ -1,5 +1,4 @@
 require 'statsample'
-require_relative 'data_analyst'
 require_relative 'test_statistic'
 
 # The mean confidence interval gives an interval estimate of 
