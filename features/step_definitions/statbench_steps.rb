@@ -1,5 +1,6 @@
 Given(/^two data files$/) do
-  pending # express the regexp above with the code you wish you had
+  @data1 = "#{ENV['PWD']}/spec/test_data/data1.txt"
+  @data2 = "#{ENV['PWD']}/spec/test_data/data2.txt"
 end
 
 When(/^I request summary data$/) do
