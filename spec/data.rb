@@ -2,8 +2,7 @@
 
 # We will have to do something about this down the line but for
 # now, it makes the tests run...
-PATH = "/home/dscheider/Dropbox/Dana/rubyvm/statbench_fork/spec/data_files/"
-
+PATH = ENV["PWD"] + "/spec/test_data/"
 DATA_FILE_1 = PATH + 'data1.txt'
 DATA_FILE_2 = PATH + 'data2.txt'
 DATA_FILE_3 = PATH + 'data3.txt'

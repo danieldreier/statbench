@@ -50,6 +50,9 @@ Test C                          -------------====O=====--------------->
 
 ```
 
+## Testing
+
+Run tests from the main statbench directory.
 
 ## References
 
