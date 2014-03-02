@@ -2,7 +2,6 @@ require_relative 'spec_helper'
 
 describe ConfidenceInterval do 
   before(:all) do 
-    @processor = DataAnalyst.new(DATASET_1,DATASET_2)
     @file_processor = DataAnalyst.new(DATA_FILE_1,DATA_FILE_2)
   end
 
