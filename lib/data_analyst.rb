@@ -12,8 +12,8 @@ class DataAnalyst
   attr_reader :hash
 
   def initialize(data1,data2)
-    @data1 = standardize_data(data1)
-    @data2 = standardize_data(data2)
+    @data1 = process_file(data1)
+    @data2 = process_file(data2)
     process_data
   end
 
@@ -23,7 +23,7 @@ class DataAnalyst
             }
   end
 
-  def process_file(data_file)
+  def process_file(file)
     arr = Array.new
     File.open(data_file,'r+') do |file|
       file.each_line do |line|
@@ -33,25 +33,12 @@ class DataAnalyst
     arr.to_scale
   end
 
-  def standardize_data(data)
-    if (data.instance_of? File) || (data.instance_of? String)
-      puts "Processing input file..."
-      process_file(data)
-    elsif data.instance_of? Array
-      data.to_scale
-    elsif data.instance_of? Vector
-      data
-    else 
-      raise(ArgumentError,"Data must be array, vector/scale or file")
-    end
-  end
-
   def summary_stats
     stats = {:old_config => nil, :new_config => nil}
     [@data1,@data2].each do |dataset|
       # Summary statistics include min, max, median, iqr, upper fence, and lower fence
       min = dataset.min; max = dataset.max 
-      upper_fence = (median = dataset.median + (fence_range = 1.5 * (iqr = (q1 = dataset.percentil(25)) - (q2 = dataset.percentil(75)))))
+      upper_fence = (median = dataset.median + (fence_range = 1.5 * (iqr = (q2 = dataset.percentil(75)) - (q1 = dataset.percentil(25)))))
       lower_fence = median - fence_range
 
       stats.each do |key, value|
@@ -69,13 +56,3 @@ class DataAnalyst
     stats
   end
 end
-
-#   def set_variables(array)
-#     array.each do |data|
-#       variable_name = "@dataset_" + (i = (array.find_index(data) + 1).to_s) 
-#       size_variable = "@n" + i
-#       data          = data.to_scale if data.instance_of? Array 
-#       instance_variable_set(variable_name,data)
-#       instance_variable_set(size_variable,data.size)
-#     end
-#   end
