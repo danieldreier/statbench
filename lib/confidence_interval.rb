@@ -23,9 +23,8 @@ module ConfidenceInterval
   end
 
   def mean_interval(statistic,point_estimate)
-    std_error = standard_error
-    [(point_estimate - statistic.abs * std_error).round(5), 
-     (point_estimate + statistic.abs * std_error).round(5) ]
+    [(point_estimate - statistic.abs * standard_error).round(5), 
+     (point_estimate + statistic.abs * standard_error).round(5) ]
   end
 
   def mean_difference(hash=@hash,confidence=0.95)
