@@ -11,5 +11,6 @@ describe SummaryStats do
       it 'returns a hash of values'
       it 'includes minimum, maximum, median, Q1, Q2, IQR, upper fence, and lower fence'
     end
+    describe 'two data sets'
   end
 end # SummaryStats
