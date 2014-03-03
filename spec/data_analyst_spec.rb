@@ -17,7 +17,12 @@ describe DataAnalyst do
                                      'nu2' => 199, 'mean2' => 29.2633, 'var2' => 314.6817 })
   end
 
-  it 'gets a confidence interval from the ConfidenceInterval module'
-  it 'gets test results from the HypothesisTest module'
-  it 'gets summary statistics from the SummaryStats module'
+  it 'returns summary of a hypothesis test' do 
+    expect(@processor.mean_test_summary).to eql("Average response time hasn't changed.")
+  end
+
+  it 'returns an estimated difference' do 
+    outcome = "Average response time may have improved by as much as 3.00515 seconds or gone up by as much as 1.78595 seconds."
+    expect(@processor.estimate_mean_difference).to eql(outcome)
+  end
 end
