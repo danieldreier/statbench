@@ -18,6 +18,17 @@ class DataAnalyst
     process_data
   end
 
+  def mean_test_summary(significance = 0.05)
+    result = if HypothesisTest::faster?(@hash, significance)
+      "The new configuration is faster."
+    elsif HypothesisTest::slower?(@hash,significance)
+      "The new configuration is slower."
+    else
+      "Average response time hasn't changed."
+    end
+    result
+  end
+
   def process_data(data1=@data1,data2=@data2)
     @hash = { 'nu1' => @data1.size - 1, 'mean1' => @data1.mean.round(4), 'var1' => @data1.variance_sample.round(4),
               'nu2' => @data2.size - 1, 'mean2' => @data2.mean.round(4), 'var2' => @data2.variance_sample.round(4)
@@ -32,5 +43,17 @@ class DataAnalyst
       end
     end
     arr.to_scale
+  end
+
+
+  def variance_test_summary(significance = 0.05)
+    result = if HypothesisTest::more_consistent?(@hash, significance)
+      "The new configuration is more consistent."
+    elsif HypothesisTest::more_variable?(@hash, significance)
+      "The new configuration is more variable."
+    else
+      "Variability in response times hasn't changed."
+    end
+    result
   end
 end
