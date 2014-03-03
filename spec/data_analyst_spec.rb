@@ -23,6 +23,6 @@ describe DataAnalyst do
 
   it 'returns an estimated difference' do 
     outcome = "Average response time may have improved by as much as 3.00515 seconds or gone up by as much as 1.78595 seconds."
-    expect(@processor.estimate_mean_difference).to eql(outcome)
+    expect(@processor.estimate_difference_mean).to eql(outcome)
   end
 end
