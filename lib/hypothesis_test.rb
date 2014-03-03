@@ -30,6 +30,8 @@ module HypothesisTest
     true if t_star <= t_critical
   end
 
+  alias_method :slower?, :mean_hypothesis_test_left
+
   # Right-tailed test
   def mean_hypothesis_test_right(hash=@hash,significance=0.05)
     get_variables(hash)
@@ -41,13 +43,6 @@ module HypothesisTest
   end
 
   alias_method :faster?, :mean_hypothesis_test_right
-
-  def mean_test_results(hash=@hash,significance=0.05)
-    summary = if faster?(hash,significance) then "configuration 2 is faster";
-    elsif mean_hypothesis_test_left(hash,significance) then "configuration 2 is slower";
-    else "mean response time hasn't changed" end
-    { :summary => summary, :confidence => 1 - significance }
-  end
 
   # If this test is true, there's been an improvement in variability
   def variance_hypothesis_test_left(hash=@hash,significance=0.05)
@@ -65,6 +60,8 @@ module HypothesisTest
     true if f_star < f_critical
   end
 
+  alias_method :more_variable?, :variance_hypothesis_test_left
+
   def variance_hypothesis_test_right(hash=@hash,significance=0.05)
     get_variables(hash)
     f_star     = @var1.quo(@var2)
@@ -77,13 +74,6 @@ module HypothesisTest
   end
 
   alias_method :more_consistent?, :variance_hypothesis_test_right
-
-  def variance_test_results(hash=@hash,significance=0.05)
-    summary = if more_consistent?(hash,significance) then "configuration 2 is more consistent";
-    elsif variance_hypothesis_test_left(hash,significance) then "configuration 2 is less"; 
-    else "variability in response time hasn't changed" end
-    { :summary => summary, :confidence => 1 - significance }
-  end
 end
 
 include HypothesisTest # I have no idea why this is required for it not to throw errors
