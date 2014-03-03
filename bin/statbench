@@ -37,10 +37,9 @@ arg_name 'Data files for old and new configurations'
 command :compare do |c|
   c.action do |global_options,options,args|
 
-    # Your command logic here
-     
-    # If you have any errors, just raise them
-    # raise "that command made no sense"
+    processor = DataAnalyst.new(args[1],args[2])
+    puts processor.mean_test_summary
+    puts processor.variability_test_summary
 
     puts "compare command ran"
   end
@@ -49,6 +48,14 @@ end
 desc 'Describe estimate here'
 arg_name 'Describe arguments to estimate here'
 command :estimate do |c|
+  c.desc 'Response time only'
+  c.switch [:s, :speed]
+  c.default_value 'false'
+
+  c.desc 'Variability only'
+  c.switch [:v, :variability]
+  c.default_value 'false'
+
   c.action do |global_options,options,args|
     puts "estimate command ran"
   end
