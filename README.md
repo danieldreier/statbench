@@ -50,10 +50,6 @@ Test C                          -------------====O=====--------------->
 
 ```
 
-## Testing
-
-Run tests from the main statbench directory.
-
 ## References
 
 Text::BoxPlot - Render ASCII box and whisker charts
