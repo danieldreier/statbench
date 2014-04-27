@@ -76,7 +76,7 @@ class DataAnalyst
     result = if HypothesisTest::more_consistent?(@hash, significance)
       "The new configuration is more consistent."
     elsif HypothesisTest::more_variable?(@hash, significance)
-      "The new configuration is more variable."
+      "The new configuration is less consistent."
     else
       "Variability in response times hasn't changed."
     end
