@@ -18,6 +18,32 @@ class DataAnalyst
     process_data
   end
 
+  def estimate_difference_mean(confidence_level = 0.95)
+    interval = mean_difference(@hash, confidence_level)[:interval]
+    beginning = "Average response time "
+    ending = if interval.all? {|n| n <= 0 }
+      "has improved by #{interval[1].abs} to #{interval[0].abs} seconds."
+    elsif interval.all? {|n| n > 0 }
+      "has gone up by #{interval[0]} to #{interval[1]} seconds."
+    else
+      "may have improved by as much as #{interval[0].abs} seconds or gone up by as much as #{interval[1]} seconds."
+    end
+    beginning + ending
+  end
+
+  # def estimate_difference_variance(confidence_level = 0.95)
+  #   interval = sdev_difference(@hash,confidence_level)[:interval]
+  #   beginning = "Variation in response times "
+  #   ending = if interval.all? {|n| n <= 1 }
+  #     "has improved by #{interval[1].abs}% to #{interval[0].abs}%."
+  #   elsif interval.all? {|n| n > 0 }
+  #     "has gone up by #{interval[0]}% to #{interval[1]}%."
+  #   else
+  #     "may have improved by as much as #{interval[0].abs}% or gone up by as much as #{interval[1]}%."
+  #   end
+  #   beginning + ending
+  # end
+
   def mean_test_summary(significance = 0.05)
     result = if HypothesisTest::faster?(@hash, significance)
       "The new configuration is faster."

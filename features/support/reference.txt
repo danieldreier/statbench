@@ -1,0 +1,9 @@
+Aruba step definitions:
+
+Then /^the stdout(?: from "(.*?)")? should contain( exactly)? "(.*?)"$/ do |cmd, exact, expected|
+  if exact
+    assert_exact_output(expected, cmd ? stdout_from(cmd) : all_stdout)
+  else
+    assert_partial_output(expected, cmd ? stdout_from(cmd) : all_stdout)
+  end
+end

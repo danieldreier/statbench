@@ -53,10 +53,6 @@ module HypothesisTest
                                                           :tail                 => 'left',
                                                           :degrees_of_freedom_1 => @nu1,
                                                           :degrees_of_freedom_2 => @nu2 )
-    puts "@var1  = #{@var1}"
-    puts "@var2  = #{@var2}"
-    puts "f_crit = #{f_critical}"
-    puts "f_star = #{f_star}"
     true if f_star < f_critical
   end
 
