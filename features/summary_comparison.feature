@@ -7,5 +7,5 @@ Feature: Summary comparison
 
     Given two data sets
     When I request a comparison
-    Then the stdout should contain "Average response time hasn't changed"
-    And the stdout should contain "Variability in response times hasn't changed"
+    Then the stdout should contain "Average response time hasn't changed."
+    And the stdout should contain "Variability in response times hasn't changed."
