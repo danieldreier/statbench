@@ -1,9 +1,11 @@
 # I am going to make one thing really clear up front about mean hypothesis tests:
 # A FASTER CONFIGURATION MEANS A *LOWER* MEAN RESPONSE TIME. We are testing whether
 # the new configuration is faster than the old one:
-# H0: mu1 < mu2
-# H1: mu1 >= mu2
+# H0: mu1 <= mu2
+# H1: mu1 > mu2
 # In other words, this is a right-tailed test for mean.
+#
+# In the same way, a more consistent configuration means a *lower* variability.
 
 require 'statsample'
 require_relative 'test_statistic'
